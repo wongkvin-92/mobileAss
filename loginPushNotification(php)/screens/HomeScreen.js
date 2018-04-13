@@ -36,7 +36,7 @@ export default class HomeScreen extends React.Component {
 
 
   static navigationOptions = {
-    header: 'Home',
+    header: null,
   };
 
   render() {

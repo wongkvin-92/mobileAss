@@ -45,7 +45,7 @@ export default class signup extends React.Component {
 
         const { username, password, name,  genre} = this.state;
 
-        fetch('http://192.168.0.189/VideoAss/signUp.php', {
+        fetch('http://10.125.193.216/VideoAss/signUp.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

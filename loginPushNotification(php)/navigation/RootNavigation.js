@@ -2,21 +2,18 @@ import { Notifications } from 'expo';
 import React from 'react';
 import { View, Button, Text } from 'react-native'
 import { StackNavigator } from 'react-navigation';
-//import Admin from '../screens/LoginAdminScreen';
-//import Member from '../screens/LoginMemberScreen';
+import Login from '../screens/LoginScreen';
 import SignUp from '../screens/SignUpScreen';
-import MemberScreen from '../screens/LoginMemberScreen';
 import MainTabNavigator from './MainTabNavigator';
-import LoginTabNavigator from './LoginTabNavigator'
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 const RootStackNavigator = StackNavigator(
   {
     Login:{
-      screen: MemberScreen,
+      screen: Login
     },
     SignUp:{
-      screen: SignUp,
+      screen: SignUp
     },
     Main: {
       screen: MainTabNavigator,
