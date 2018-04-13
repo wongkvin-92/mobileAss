@@ -2,37 +2,54 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
-import { StackNavigator } from 'react-navigation';
+
 import Colors from '../constants/Colors';
-import LoginTabNavigator from './LoginTabNavigator';
-import AdminScreen from '../screens/LoginAdminScreen';
-import RootNavigation from '../navigation/RootNavigation';
+
+import VideoScreen from '../screens/VideoScreen';
+import HomeScreen from '../screens/HomeScreen';
+import LinksScreen from '../screens/LinksScreen';
+import NotificationsScreen from  '../screens/NotificationsScreen';
 
 export default TabNavigator(
   {
-    Admin: {
-      screen: AdminScreen,
+    Video: {
+      screen: VideoScreen,
     },
-    Member: {
-      screen: RootNavigation,
+    Home: {
+      screen: HomeScreen,
     },
-
+    Links: {
+      screen: LinksScreen,
+    },
+   /* Notifications: {
+      screen: NotificationsScreen,
+    },*/
   },
   {
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused }) => {
-        const { routeNameLogin } = navigation.state;
+        const { routeName } = navigation.state;
         let iconName;
-        switch (routeNameLogin) {
-          case 'Admin':
+        switch (routeName) {
+          case 'Video':
             iconName = Platform.OS === 'ios'
               ? `ios-information-circle${focused ? '' : '-outline'}`
               : 'md-information-circle';
             break;
-          case 'Member':
+          case 'Home':
+            iconName = Platform.OS === 'ios'
+              ? `ios-information-circle${focused ? '' : '-outline'}`
+              : 'md-information-circle';
+            break;
+          case 'Links':
             iconName = Platform.OS === 'ios'
               ? `ios-link${focused ? '' : '-outline'}`
               : 'md-link';
+            break;
+          case 'Notifications':
+            iconName = Platform.OS === 'ios'
+                ? `ios-notifications${focused ? '' : '-outline'}`
+                : 'md-notifications';
         }
         return (
           <Ionicons
