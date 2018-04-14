@@ -5,21 +5,16 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
-import VideoScreen from '../screens/VideoScreen';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-
+import AdminHomeScreen from '../screens/AdminHomeScreen';
+import AdminMemberProfile from '../screens/AdminMemberProfile';
 
 export default TabNavigator(
   {
-    Video: {
-      screen: VideoScreen,
+    AdminHomeScreen: {
+      screen: AdminHomeScreen,
     },
-    Home: {
-      screen: HomeScreen,
-    },
-    Links: {
-      screen: LinksScreen,
+    AdminMemberProfile: {
+      screen: AdminMemberProfile,
     },
    /* Notifications: {
       screen: NotificationsScreen,
@@ -28,24 +23,18 @@ export default TabNavigator(
   {
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused }) => {
-        const { routeName } = navigation.state;
+        const { adminRouteName } = navigation.state;
         let iconName;
-        switch (routeName) {
-          case 'Video':
+        switch (adminRouteName) {
+          case 'AdminHomeScreen':
             iconName = Platform.OS === 'ios'
               ? `ios-information-circle${focused ? '' : '-outline'}`
               : 'md-information-circle';
             break;
-          case 'Home':
+          case 'AdminMemberProfile':
             iconName = Platform.OS === 'ios'
-              ? `ios-information-circle${focused ? '' : '-outline'}`
-              : 'md-information-circle';
-            break;
-          case 'Links':
-            iconName = Platform.OS === 'ios'
-              ? `ios-link${focused ? '' : '-outline'}`
-              : 'md-link';
-
+            ? `ios-link${focused ? '' : '-outline'}`
+            : 'md-link';
         }
         return (
           <Ionicons

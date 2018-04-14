@@ -27,46 +27,47 @@ export default class login extends React.Component {
 
     onLoginPressAdmin() {
 
+      var d = {
+        "username" : this.state.email,
+
+        "userPassword" : this.state.password,
+      };
+        console.log(JSON.stringify(d));
+
         this.setState({ error: '', loading: true });
+
 
         const { email, password } = this.state;
 
-        fetch('http://10.125.192.47/VideoAss/loginAdmin.php', {
+        fetch('http://192.168.0.101/VideoAss/loginAdmin.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
+        body: JSON.stringify(d)
 
-          username : this.state.email,
-
-          userPassword : this.state.password
-
-        })
-
-        }).then((response) => response.json())
-            .then((responseJson) => {
+        }).then((response) =>  {
 
               // Showing response message coming from server updating records.
-              Alert.alert(responseJson);
-
+              var r = JSON.parse(response._bodyText);
+              console.log(r);
+              alert(r.msg);
               this.props.navigation.navigate('Main');
 
             }).catch((error) => {
               console.error(error);
-              Alert.alert(error);
+              //alert(error);
             });
 
-    }
-
+}
     onLoginPressMember() {
 
         this.setState({ error: '', loading: true });
 
         const { email, password } = this.state;
 
-        fetch('http://10.125.192.47/VideoAss/loginMember.php', {
+        fetch('http://192.168.0.101/VideoAss/loginMember.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

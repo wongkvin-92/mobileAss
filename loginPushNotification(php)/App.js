@@ -3,8 +3,6 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
-import LoginTabNavigator from './navigation/LoginTabNavigator';
-
 
 export default class App extends React.Component {
   state = {
@@ -26,7 +24,7 @@ export default class App extends React.Component {
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           {Platform.OS === 'android' &&
             <View style={styles.statusBarUnderlay} />}
-          <LoginTabNavigator />
+          <RootNavigation />
         </View>
       );
     }
