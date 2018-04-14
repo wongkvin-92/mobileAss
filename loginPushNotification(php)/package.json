@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@expo/samples": "^2.1.1",
+    "@expo/videoplayer": "^0.4.0",
     "expo": "^25.0.0",
     "firebase": "^4.12.0",
     "react": "16.2.0",

@@ -47,7 +47,7 @@ export default class MemberStackNavigator extends React.Component {
   render() {
 
     return <_MemberStackNavigator
-        screenProps={this.props}
+        screenProps={this.props.screenProps}
     />;
   }
 }

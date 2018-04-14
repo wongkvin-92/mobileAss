@@ -22,7 +22,7 @@ import Header from '../components/Header'
 import SectionHeader from '../components/SectionHeader'
 import Footer from '../components/Footer'
 
- var hostAddr = "http://192.168.0.101/";
+var hostAddr = "http://192.168.0.101/";
 
 export default class ListViewDemo extends Component {
 
@@ -42,7 +42,7 @@ export default class ListViewDemo extends Component {
 	  let formData = new FormData();
 	   formData.append('videoName', this.state.contentSearch);
 
-	       fetch('http://192.168.0.101/VideoAss/selectSpecificVideo.php', {
+	       fetch(hostAddr +'VideoAss/selectSpecificVideo.php', {
           method: 'POST',
           body: formData,
   			  headers: {
@@ -68,7 +68,7 @@ export default class ListViewDemo extends Component {
 
   componentDidMount() {
 
-       return fetch('http://192.168.0.101/VideoAss/ShowAllVideo.php')
+       return fetch(hostAddr +'VideoAss/ShowAllVideo.php')
          .then((response) => response.json())
          .then((responseJson) => {
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});

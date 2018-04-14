@@ -17,8 +17,7 @@ const MemberNavigator =  TabNavigator(
     MemberUploadVideo: {
       screen: MemberUploadVideo,
     },
-
-
+  
   },
   {
     navigationOptions: ({ navigation }) => ({

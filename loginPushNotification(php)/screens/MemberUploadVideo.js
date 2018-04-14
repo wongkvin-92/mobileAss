@@ -6,6 +6,8 @@ import { StackNavigator } from 'react-navigation';
 
 import Exponent, { Constants, ImagePicker, registerRootComponent } from 'expo';
 
+var hostAddr = "http://192.168.0.101/";
+
 class MainActivity extends Component {
 
   static navigationOptions =
@@ -19,9 +21,9 @@ constructor(props) {
 
    this.state = {
 
-     TextInput_PokemonName: '',
-     TextInput_PokemonLevel: '',
-     TextInput_PokemonImage: '',
+     TextInput_VideoName: '',
+     TextInput_Description: '',
+     TextInput_VideoPath: '',
 
    }
 
@@ -37,16 +39,16 @@ constructor(props) {
 
 	console.log(pickerResult);
 
-	this.setState({ TextInput_PokemonImage : pickerResult.uri })
+	this.setState({ TextInput_VideoPath : pickerResult.uri })
 
   };
 
  InsertPokemonRecordsToServer = () =>{
 	let formData = new FormData();
-	let uri = this.state.TextInput_PokemonImage;
+	let uri = this.state.TextInput_VideoPath;
 
-  formData.append('pokemonName', this.state.TextInput_PokemonName);
-	formData.append('pokemonLevel', this.state.TextInput_PokemonLevel);
+  formData.append('pokemonName', this.state.TextInput_VideoName);
+	formData.append('pokemonLevel', this.state.TextInput_Description);
 	//formData.append('pokemonImage', this.state.TextInput_PokemonImage);
 	formData.append('pokemonImage', {
     uri,
@@ -54,7 +56,7 @@ constructor(props) {
     type: 'video/mp4',
   });
 	console.log(uri+'SSS');
-      fetch('http://192.168.0.101/ReactNative/InsertPokemonData.php', {
+      fetch(hostAddr + 'ReactNative/InsertPokemonData.php', {
       method: 'POST',
 	  body: formData,
       headers: {
@@ -92,7 +94,7 @@ constructor(props) {
 
          placeholder="Enter Pokemon Name"
 
-         onChangeText={ TextInputValue => this.setState({ TextInput_PokemonName : TextInputValue }) }
+         onChangeText={ TextInputValue => this.setState({ TextInput_VideoName : TextInputValue }) }
 
          underlineColorAndroid='transparent'
 
@@ -103,7 +105,7 @@ constructor(props) {
 
          placeholder="Enter Pokemon Level"
 
-         onChangeText={ TextInputValue => this.setState({ TextInput_PokemonLevel : TextInputValue }) }
+         onChangeText={ TextInputValue => this.setState({ TextInput_Description : TextInputValue }) }
 
          underlineColorAndroid='transparent'
 
@@ -157,7 +159,7 @@ class ShowPokemonListActivity extends Component {
 
   componentDidMount() {
 
-       return fetch('http://192.168.0.101/ReactNative/ShowAllPokemonList.php')
+       return fetch(hostAddr + '/ReactNative/ShowAllPokemonList.php')
          .then((response) => response.json())
          .then((responseJson) => {
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -246,10 +248,10 @@ class EditPokemonRecordActivity extends Component {
 
        this.state = {
 
-         TextInput_PokemonId: '',
-         TextInput_PokemonName: '',
-         TextInput_PokemonLevel: '',
-         TextInput_PokemonImage: '',
+         TextInput_VideoId: '',
+         TextInput_VideoName: '',
+         TextInput_Description: '',
+         TextInput_VideoPath: '',
 
        }
 
@@ -259,10 +261,10 @@ class EditPokemonRecordActivity extends Component {
 
       // Received Student Details Sent From Previous Activity and Set Into State.
       this.setState({
-        TextInput_PokemonId : this.props.navigation.state.params.id,
-        TextInput_PokemonName: this.props.navigation.state.params.name,
-        TextInput_PokemonLevel: this.props.navigation.state.params.level,
-        TextInput_PokemonImage: this.props.navigation.state.params.image1,
+        TextInput_VideoId : this.props.navigation.state.params.id,
+        TextInput_VideoName: this.props.navigation.state.params.name,
+        TextInput_Description: this.props.navigation.state.params.level,
+        TextInput_VideoPath: this.props.navigation.state.params.image1,
       })
 
      }
@@ -274,7 +276,7 @@ class EditPokemonRecordActivity extends Component {
 
     UpdatePokemonRecord = () =>{
 
-            fetch('http://192.168.0.101/ReactNative/UpdatePokemonRecord.php', {
+            fetch(hostAddr + '/ReactNative/UpdatePokemonRecord.php', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -282,13 +284,13 @@ class EditPokemonRecordActivity extends Component {
             },
             body: JSON.stringify({
 
-              pokemonId : this.state.TextInput_PokemonId,
+              pokemonId : this.state.TextInput_VideoId,
 
-              pokemonName : this.state.TextInput_PokemonName,
+              pokemonName : this.state.TextInput_VideoName,
 
-              pokemonLevel : this.state.TextInput_PokemonLevel,
+              pokemonLevel : this.state.TextInput_Description,
 
-              pokemonImage : this.state.TextInput_PokemonImage
+              pokemonImage : this.state.TextInput_VideoPath
 
             })
 
@@ -307,7 +309,7 @@ class EditPokemonRecordActivity extends Component {
 
     DeletePokemonRecord = () =>{
 
-          fetch('http://192.168.0.101/ReactNative/DeletePokemonRecord.php', {
+          fetch(hostAddr + '/ReactNative/DeletePokemonRecord.php', {
           method: 'POST',
           headers: {
           'Accept': 'application/json',
@@ -315,7 +317,7 @@ class EditPokemonRecordActivity extends Component {
           },
           body: JSON.stringify({
 
-            pokemonId : this.state.TextInput_PokemonId
+            pokemonId : this.state.TextInput_VideoId
 
           })
 
@@ -345,9 +347,9 @@ class EditPokemonRecordActivity extends Component {
 
             placeholder="Pokemon Name Shows Here"
 
-            value={this.state.TextInput_PokemonName}
+            value={this.state.TextInput_VideoName}
 
-            onChangeText={ TextInputValue => this.setState({ TextInput_PokemonName : TextInputValue }) }
+            onChangeText={ TextInputValue => this.setState({ TextInput_VideoName : TextInputValue }) }
 
             underlineColorAndroid='transparent'
 
@@ -358,9 +360,9 @@ class EditPokemonRecordActivity extends Component {
 
             placeholder="Pokemon Level Shows Here"
 
-            value={this.state.TextInput_PokemonLevel}
+            value={this.state.TextInput_Description}
 
-            onChangeText={ TextInputValue => this.setState({ TextInput_PokemonLevel : TextInputValue }) }
+            onChangeText={ TextInputValue => this.setState({ TextInput_Description : TextInputValue }) }
 
             underlineColorAndroid='transparent'
 
@@ -371,9 +373,9 @@ class EditPokemonRecordActivity extends Component {
 
             placeholder="Pokemon Image Shows Here"
 
-            value={this.state.TextInput_PokemonImage}
+            value={this.state.TextInput_VideoPath}
 
-            onChangeText={ TextInputValue => this.setState({ TextInput_PokemonImage : TextInputValue }) }
+            onChangeText={ TextInputValue => this.setState({ TextInput_VideoPath : TextInputValue }) }
 
             underlineColorAndroid='transparent'
 

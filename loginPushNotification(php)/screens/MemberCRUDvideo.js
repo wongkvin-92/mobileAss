@@ -6,8 +6,6 @@ import { StackNavigator } from 'react-navigation';
 
 import Exponent, { Constants, ImagePicker, registerRootComponent } from 'expo';
 
- var hostAddr = "http://192.168.0.101";
-
 class MainActivity extends Component {
 
   static navigationOptions =
@@ -56,7 +54,7 @@ constructor(props) {
     type: 'video/mp4',
   });
 	console.log(uri+'SSS');
-      fetch( hostAddr + '/ReactNative/InsertPokemonData.php', {
+      fetch('http://10.125.197.200/ReactNative/InsertPokemonData.php', {
       method: 'POST',
 	  body: formData,
       headers: {
@@ -159,7 +157,7 @@ class ShowPokemonListActivity extends Component {
 
   componentDidMount() {
 
-       return fetch( hostAddr + '/ReactNative/ShowAllPokemonList.php')
+       return fetch('http://10.125.197.200/ReactNative/ShowAllPokemonList.php')
          .then((response) => response.json())
          .then((responseJson) => {
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -276,7 +274,7 @@ class EditPokemonRecordActivity extends Component {
 
     UpdatePokemonRecord = () =>{
 
-            fetch( hostAddr + '/ReactNative/UpdatePokemonRecord.php', {
+            fetch('http://10.125.197.200/ReactNative/UpdatePokemonRecord.php', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -286,7 +284,7 @@ class EditPokemonRecordActivity extends Component {
 
               pokemonId : this.state.TextInput_PokemonId,
 
-              pokemonName : this.state.TextInput_PokemonName,
+              pokemonName : this.state.TextInput_PokemonImage,
 
               pokemonLevel : this.state.TextInput_PokemonLevel,
 
@@ -309,7 +307,7 @@ class EditPokemonRecordActivity extends Component {
 
     DeletePokemonRecord = () =>{
 
-          fetch( hostAddr + '/ReactNative/DeletePokemonRecord.php', {
+          fetch('http://10.125.197.200/ReactNative/DeletePokemonRecord.php', {
           method: 'POST',
           headers: {
           'Accept': 'application/json',
