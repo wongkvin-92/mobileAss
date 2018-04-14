@@ -1,23 +1,27 @@
 import { Notifications } from 'expo';
 import React from 'react';
 import { View, Button, Text } from 'react-native'
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator} from 'react-navigation';
 
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
-import MemberHomeScreen from '../screens/MemberHomeScreen';
-import MemberUploadVideo from '../screens/MemberUploadVideo';
-import VideoCustomScreen from '../screens/VideoCustomScreen';
 
+//import VideoCustomScreen from '../screens/VideoCustomScreen';
+
+import MemberHomeScreen from '../screens/MemberHomeScreen';
+//import MemberUploadVideo from '../screens/MemberUploadVideo';
 const _MemberStackNavigator = StackNavigator(
   {
-
+    MemberHomeScreen: {
+      screen: MemberHomeScreen
+    },
 
         //screen: Login
+        /*
     VideoPlayer:{
       screen: VideoCustomScreen
     },
-
-    /*
+*/
+/*
     Main: {
       screen: MainTabNavigator,
     },

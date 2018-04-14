@@ -1,24 +1,24 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { StackNavigator, TabNavigator , TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
-import MemberHomeScreen from '../screens/MemberHomeScreen';
+import MemberStackNavigator from '../navigation/MemberStackNavigator';
 import MemberUploadVideo from '../screens/MemberUploadVideo';
-
 const MemberNavigator =  TabNavigator(
   {
+
     MemberHomeScreen: {
-      screen: MemberHomeScreen,
+      screen: MemberStackNavigator,
     },
+
     MemberUploadVideo: {
       screen: MemberUploadVideo,
     },
-   /* Notifications: {
-      screen: NotificationsScreen,
-    },*/
+
+
   },
   {
     navigationOptions: ({ navigation }) => ({
