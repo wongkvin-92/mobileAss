@@ -12,7 +12,7 @@ import {
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
-import MainNavigator from '../navigation/MainTabNavigator';
+import AdminNavigator from '../navigation/AdminTabNavigator';
 //import {NotificationsAndroid} from 'react-native-notifications';
 
 export default class HomeScreen extends React.Component {
@@ -30,13 +30,13 @@ export default class HomeScreen extends React.Component {
 		console.log(
 		  `Push notification ${origin} with data: ${JSON.stringify(data)}`,
 		);
-		<MainNavigator />
+		<AdminNavigator />
 	  };
 
 
 
   static navigationOptions = {
-    header: null,
+    header: "AdminMemberProfile",
   };
 
   render() {

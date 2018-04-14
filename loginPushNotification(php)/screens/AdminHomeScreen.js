@@ -24,7 +24,9 @@ import Footer from '../components/Footer'
 
 
 export default class ListViewDemo extends Component {
-
+  static navigationOptions = {
+    header: "AdminHomeScreen",
+  };
   constructor(props) {
     super(props);
 

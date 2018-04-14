@@ -5,6 +5,7 @@ import { StackNavigator } from 'react-navigation';
 import Login from '../screens/LoginScreen';
 import SignUp from '../screens/SignUpScreen';
 import MainTabNavigator from './MainTabNavigator';
+import AdminTabNavigator from './AdminTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 const RootStackNavigator = StackNavigator(
@@ -17,6 +18,9 @@ const RootStackNavigator = StackNavigator(
     },
     Main: {
       screen: MainTabNavigator,
+    },
+    Admin: {
+      screen: AdminTabNavigator
     },
 
   },
