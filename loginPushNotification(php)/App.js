@@ -1,15 +1,73 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { AppRegistry, Alert, Platform, StatusBar, StyleSheet, View , Text} from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
+import AdminTabNavigator from './navigation/AdminTabNavigator';
+import MemberTabNavigator from './navigation/MemberTabNavigator';
+
+ var hostAddr = "http://192.168.0.101/";
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    isLoggedIn: false,
+    userType: ""
   };
 
+  componentWillMount(){
+    fetch(hostAddr+'VideoAss/isLoggedIn.php', {
+          method: 'GET',
+    			dataType: 'json'
+    }).then( r => r.json()).then( r => {
+      if(r.result == true){
+        this.setState({isLoggedIn: r.result, userType: r.user_type});
+      }else{
+          this.setState({isLoggedIn: r.result});
+      }
+    });
+  }
+
+
+  testIsLoggedIn(){
+    if(this.state.isLoggedIn == true)
+      return (<Text>I am logged in as {this.state.userType}</Text>);
+    else {
+        return (<Text> I am not logged in</Text>);
+    }
+  }
+
+  onPressLogout= ()=> {
+    fetch(hostAddr+'/VideoAss/logout.php', {
+          method: 'GET',
+    			dataType: 'json'
+    }).then( r => r.json()).then( r => {
+      Alert.alert("Logout successful");
+      this.setState({isLoggedIn: false, userType: ""});
+    });
+  }
+
+  setAdmin = ()=>{
+    this.setState({isLoggedIn: true, userType: "admin"});
+  }
+
+  setMember = ()=>{
+    this.setState({isLoggedIn: true, userType: "member"});
+  }
+
+  mainView(){
+    if(this.state.userType=="admin"){
+      return <AdminTabNavigator
+        onLogoutPress = {this.onPressLogout}
+      />;
+    }else{
+      return <MemberTabNavigator
+        onLogoutPress = {this.onPressLogout}
+      />;
+    }
+  }
   render() {
+
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -19,14 +77,26 @@ export default class App extends React.Component {
         />
       );
     } else {
-      return (
-        <View style={styles.container}>
+      if(this.state.isLoggedIn){
+        return(<View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          {Platform.OS === 'android' &&
-            <View style={styles.statusBarUnderlay} />}
-          <RootNavigation />
-        </View>
-      );
+          {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+          {this.mainView()}
+        </View> );
+      }else{
+          return (
+            <View style={styles.container}>
+              {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              {Platform.OS === 'android' &&
+                <View style={styles.statusBarUnderlay} />}
+                  {this.testIsLoggedIn()}
+              <RootNavigation
+                setAdmin={this.setAdmin}
+                setMember={this.setMember}
+              />
+            </View>
+          );
+      }
     }
   }
 

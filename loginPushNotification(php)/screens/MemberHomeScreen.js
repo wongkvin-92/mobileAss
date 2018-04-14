@@ -22,33 +22,27 @@ import Header from '../components/Header'
 import SectionHeader from '../components/SectionHeader'
 import Footer from '../components/Footer'
 
- var hostAddr = "http://192.168.0.101";
+ var hostAddr = "http://192.168.0.101/";
 
-export default class AdminHomeScreen extends Component {
-  static navigationOptions = {
-    header: "AdminHomeScreen",
-  };
+export default class ListViewDemo extends Component {
+
   constructor(props) {
     super(props);
 
 	this.state = {
+
       isLoading: true,
-	    contentSearch: 'aaa',
-      logout: false
+	  contentSearch: 'aaa',
+
     }
-  }
-
-  componentWillReceiveProps(props){
-
-    //this.onLogoutPress = props.onLogoutPress;
   }
 
   onPressButton = () => {
 	  console.log(this.state.contentSearch);
-    let formData = new FormData();
+	  let formData = new FormData();
 	   formData.append('videoName', this.state.contentSearch);
 
-	       fetch( hostAddr + '/VideoAss/approveVideo.php', {
+	       fetch('http://192.168.0.101/VideoAss/selectSpecificVideo.php', {
           method: 'POST',
           body: formData,
   			  headers: {
@@ -59,7 +53,6 @@ export default class AdminHomeScreen extends Component {
 			  })
          .then((response) => response.json())
          .then((responseJson) => {
-
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
            this.setState({
 			   isLoading: false,
@@ -75,7 +68,7 @@ export default class AdminHomeScreen extends Component {
 
   componentDidMount() {
 
-       return fetch( hostAddr + '/VideoAss/ShowAllPokemonList.php')
+       return fetch('http://192.168.0.101/VideoAss/ShowAllVideo.php')
          .then((response) => response.json())
          .then((responseJson) => {
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -92,6 +85,7 @@ export default class AdminHomeScreen extends Component {
      }
 
   render() {
+
 	  if (this.state.isLoading) {
         return (
           <View style={{flex: 1, paddingTop: 20}}>
@@ -102,24 +96,22 @@ export default class AdminHomeScreen extends Component {
 
     return (
       <View style={styles.container}>
-
-		<TextInput
-		  style={styles.input}
-		  placeholder="Search Text..."
-		  onChangeText={(text) => this.setState({ contentSearch : text })}
-		/>
-
-		<Button
-		  onPress={this.onPressButton}
-		  title="Search"
-		  color="#841584"
-		  accessibilityLabel="Learn more about this purple button"
-		/>
-    <Button
-		  onPress={this.props.screenProps.onLogoutPress}
-		  title="Logout"
-		  color="#841584"
-		/>
+    		<TextInput
+    		  style={styles.input}
+    		  placeholder="Search Text..."
+    		  onChangeText={(text) => this.setState({ contentSearch : text })}
+    		/>
+    		<Button
+    		  onPress={this.onPressButton}
+    		  title="Search"
+    		  color="#841584"
+    		  accessibilityLabel="Learn more about this purple button"
+    		/>
+        <Button
+    		  onPress={this.props.screenProps.onLogoutPress}
+    		  title="Logout"
+    		  color="#841584"
+    		/>
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
@@ -144,8 +136,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#8E8E8E',
   },
   input: {
-    height: 15,
-    flex: 1,
+    height: 60,
+
     paddingHorizontal: 8,
     fontSize: 15,
     backgroundColor: '#FFFFFF',

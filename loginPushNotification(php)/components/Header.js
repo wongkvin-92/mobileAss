@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#C1C1C1',
   },
   input: {
-    height: 30,
+    height: 15,
     flex: 1,
     paddingHorizontal: 8,
     fontSize: 15,

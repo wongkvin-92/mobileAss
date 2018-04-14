@@ -5,16 +5,16 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
-import AdminHomeScreen from '../screens/AdminHomeScreen';
-import AdminMemberProfile from '../screens/AdminMemberProfile';
+import MemberHomeScreen from '../screens/MemberHomeScreen';
+import MemberUploadVideo from '../screens/MemberUploadVideo';
 
-const AdminNavigator =  TabNavigator(
+const MemberNavigator =  TabNavigator(
   {
-    AdminHomeScreen: {
-      screen: AdminHomeScreen,
+    MemberHomeScreen: {
+      screen: MemberHomeScreen,
     },
-    AdminMemberProfile: {
-      screen: AdminMemberProfile,
+    MemberUploadVideo: {
+      screen: MemberUploadVideo,
     },
    /* Notifications: {
       screen: NotificationsScreen,
@@ -23,15 +23,15 @@ const AdminNavigator =  TabNavigator(
   {
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused }) => {
-        const { adminRouteName } = navigation.state;
+        const { memberRouteName } = navigation.state;
         let iconName;
-        switch (adminRouteName) {
-          case 'AdminHomeScreen':
+        switch (memberRouteName) {
+          case 'MemberHomeScreen':
             iconName = Platform.OS === 'ios'
               ? `ios-information-circle${focused ? '' : '-outline'}`
               : 'md-information-circle';
             break;
-          case 'AdminMemberProfile':
+          case 'MemberUploadVideo':
             iconName = Platform.OS === 'ios'
             ? `ios-link${focused ? '' : '-outline'}`
             : 'md-link';
@@ -53,11 +53,8 @@ const AdminNavigator =  TabNavigator(
   }
 );
 
-export default class AdminTabNavigator extends React.Component {
-  constructor(props){
-    super(props);
-  }
+export default class MemberTabNavigator extends React.Component {
   render(){
-    return(<AdminNavigator screenProps={this.props} />);
+    return(<MemberNavigator screenProps={this.props} />);
   }
 }

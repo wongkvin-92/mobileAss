@@ -29,7 +29,15 @@ const Row = (props) => (
 	  style={styles.photo}
 	/>
 
-    <Text style={styles.text}>
+    <Text style={styles.text}
+    onPress={this.GetVideoIDFunction.bind(
+      this,data.videoId,
+      data.videoName,
+      data.videoDescription,
+      data.watchedNum,
+      data.videoPath
+      )}
+  >
       {`${props.videoId} ${props.videoName}`}
     </Text>
   </View>

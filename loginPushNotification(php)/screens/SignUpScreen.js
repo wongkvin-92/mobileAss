@@ -55,7 +55,7 @@ export default class signup extends React.Component {
 
         }).then(
           (response) => {
-
+            //console.log(response);
             var r = JSON.parse(response._bodyText);
             console.log(r);
             alert(r.msg);

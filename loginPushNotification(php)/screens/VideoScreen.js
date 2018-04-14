@@ -52,6 +52,7 @@ export default class ListViewDemo extends Component {
 			  })
          .then((response) => response.json())
          .then((responseJson) => {
+           console.log(responseJson);
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
            this.setState({
 			   isLoading: false,
@@ -67,7 +68,7 @@ export default class ListViewDemo extends Component {
 
   componentDidMount() {
 
-       return fetch('http://192.168.0.101/VideoAss/ShowAllPokemonList.php')
+       return fetch('http://192.168.0.101/VideoAss/ShowAllVideo.php')
          .then((response) => response.json())
          .then((responseJson) => {
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -95,17 +96,17 @@ export default class ListViewDemo extends Component {
 
     return (
       <View style={styles.container}>
-		<TextInput
-		  style={styles.input}
-		  placeholder="Search Text..."
-		  onChangeText={(text) => this.setState({ contentSearch : text })}
-		/>
-		<Button
-		  onPress={this.onPressButton}
-		  title="Search"
-		  color="#841584"
-		  accessibilityLabel="Learn more about this purple button"
-		/>
+    		<TextInput
+    		  style={styles.input}
+    		  placeholder="Search Text..."
+    		  onChangeText={(text) => this.setState({ contentSearch : text })}
+    		/>
+    		<Button
+    		  onPress={this.onPressButton}
+    		  title="Search"
+    		  color="#841584"
+    		  accessibilityLabel="Learn more about this purple button"
+    		/>
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
@@ -130,8 +131,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#8E8E8E',
   },
   input: {
-    height: 15,
-    flex: 1,
+    height: 60,
+
     paddingHorizontal: 8,
     fontSize: 15,
     backgroundColor: '#FFFFFF',

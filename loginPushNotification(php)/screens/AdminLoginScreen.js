@@ -1,14 +1,19 @@
 import React from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Button, Text, Alert } from 'react-native';
 import MainTaNavigator from '../navigation/MainTabNavigator';
 import { StackNavigator } from 'react-navigation';
 import { FormLabel, FormInput } from 'react-native-elements';
 import { Permissions, Notifications, MailComposer } from 'expo';
 
-export default class login extends React.Component {
+ var hostAddr = "http://192.168.0.101";
+
+export default class AdminLogin extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
     constructor(props) {
         super(props);
-        this.state = { email: 'Test@test.com', password: '123456', error: '', loading: false };
+        this.state = { email: 'wong@gmail.com', password: '123456', error: '', loading: false };
     }
     componentDidMount() {
 
@@ -27,53 +32,13 @@ export default class login extends React.Component {
 
     onLoginPressAdmin() {
 
-      var d = {
-        "username" : this.state.email,
-
-        "userPassword" : this.state.password,
-      };
-        console.log(JSON.stringify(d));
-
-        this.setState({ error: '', loading: true });
-
-
-        const { email, password } = this.state;
-
-        fetch(hostAddr+'/VideoAss/loginAdmin.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(d)
-
-        }).then((response) =>  {
-
-              // Showing response message coming from server updating records.
-              var r = JSON.parse(response._bodyText);
-              console.log(r);
-              alert(r.msg);
-              this.props.navigation.navigate('Main');
-
-            }).catch((error) => {
-              console.error(error);
-              //alert(error);
-            });
-
-    }
-
-    onLoginPressMember() {
-
         this.setState({ error: '', loading: true });
 
         const { email, password } = this.state;
 
-        fetch(hostAddr+'/VideoAss/loginMember.php', {
+        fetch( hostAddr + '/VideoAss/loginAdmin.php', {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
+        dataType: 'json',
         body: JSON.stringify({
 
           username : this.state.email,
@@ -87,21 +52,14 @@ export default class login extends React.Component {
 
               // Showing response message coming from server updating records.
               Alert.alert(responseJson);
-
-              this.props.navigation.navigate('Main');
+              //console.log(this);
+              this.props.screenProps.setAdmin();
+              //this.props.navigation.navigate('Main');
 
             }).catch((error) => {
               console.error(error);
               Alert.alert(error);
             });
-
-    }
-
-    onSignUpPress() {
-      //  this.setState({ error: '', loading: true });
-      //const { email, password } = this.state;
-        this.props.navigation.navigate('SignUp');
-
 
     }
 
@@ -113,14 +71,6 @@ export default class login extends React.Component {
             <Button
                 onPress={this.onLoginPressAdmin.bind(this)}
                 title='Login As Admin'/>
-            <Button
-                onPress={this.onLoginPressMember.bind(this)}
-                title='Login As Member'/>
-
-            <Button
-                onPress={this.onSignUpPress.bind(this)}
-                title='Sign up'/>
-
         </View>
 
     }
