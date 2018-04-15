@@ -6,13 +6,13 @@ import { StackNavigator } from 'react-navigation';
 
 import Exponent, { Constants, ImagePicker, registerRootComponent } from 'expo';
 
-var hostAddr = "http://192.168.0.101/";
+var hostAddr = "http://10.125.192.24/";
 
 class MainActivity extends Component {
 
   static navigationOptions =
   {
-     title: 'MainActivity',
+     title: 'Member Profile',
   };
 
 constructor(props) {

@@ -12,7 +12,15 @@ const AdminStackNavigator = StackNavigator(
     Admin: {
       screen: AdminTabNavigator
     },
-
+    VideoPlayer:{
+	screen: VideoCustomScreen,
+	navigationOptions: {
+	    tabBarVisible: true,
+	    title: 'Video Player',
+	    headerStyle: { backgroundColor: '#2196f3' },
+	    headerTintColor: '#fff'
+	}
+},
   },
   {
     navigationOptions: () => ({

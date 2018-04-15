@@ -22,7 +22,7 @@ import Header from '../components/Header'
 import SectionHeader from '../components/SectionHeader'
 import Footer from '../components/Footer'
 
-var hostAddr = "http://192.168.0.101/";
+var hostAddr = "http://10.125.192.24/";
 
 export default class ListViewDemo extends Component {
 

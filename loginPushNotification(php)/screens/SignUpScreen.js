@@ -72,38 +72,40 @@ export default class signup extends React.Component {
 
         })
 
-        .catch((error) => {
-          console.error(error);
-          this.setState({loading: false});
-            //Alert.alert(error);
-        });
+          .catch((error) => {
+            console.error(error);
+	          this.setState({loading: false});
+	            //Alert.alert(error);
+          });
 
-        fetch(PUSH_ENDPOINT, {
-           method: 'POST',
-           headers: {
-             Accept: 'application/json',
-             'Content-Type': 'application/json',
-           },
-           body: JSON.stringify({
+          fetch(PUSH_ENDPOINT, {
+             method: 'POST',
+             headers: {
+               Accept: 'application/json',
+               'Content-Type': 'application/json',
+             },
+             body: JSON.stringify({
         		  "to": token,
         		  "sound": "default",
         		  "body": "Code: 4444",
         		  //"data": "{['DDD']}",
         		  "title": "Verification Code"
-      		 }),
-         });
+        		}),
+           });
     }
 
     renderButtonOrLoading() {
         if (this.state.loading) {
             return <Text> Loading </Text>
         }
-        return
-          <View>
+        return <View>
+
             <Button
                 onPress={this.signUpMemberPress.bind(this)}
                 title='Sign up'/>
-          </View>
+
+        </View>
+
     }
     render() {
         return (

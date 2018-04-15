@@ -22,33 +22,32 @@ import Header from '../components/Header'
 import SectionHeader from '../components/SectionHeader'
 import Footer from '../components/Footer'
 
- var hostAddr = "http://192.168.0.101";
+var hostAddr = "http://10.125.192.24/";
 
 export default class AdminHomeScreen extends Component {
-  static navigationOptions = {
-    header: "AdminHomeScreen",
+
+  static navigationOptions =
+  {
+     title: 'Home Screen',
   };
+
   constructor(props) {
     super(props);
 
 	this.state = {
+
       isLoading: true,
-	    contentSearch: 'aaa',
-      logout: false
+	  contentSearch: 'aaa',
+
     }
-  }
-
-  componentWillReceiveProps(props){
-
-    //this.onLogoutPress = props.onLogoutPress;
   }
 
   onPressButton = () => {
 	  console.log(this.state.contentSearch);
-    let formData = new FormData();
+	  let formData = new FormData();
 	   formData.append('videoName', this.state.contentSearch);
 
-	       fetch( hostAddr + '/VideoAss/approveVideo.php', {
+	       fetch(hostAddr +'VideoAss/selectSpecificVideo.php', {
           method: 'POST',
           body: formData,
   			  headers: {
@@ -59,7 +58,6 @@ export default class AdminHomeScreen extends Component {
 			  })
          .then((response) => response.json())
          .then((responseJson) => {
-
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
            this.setState({
 			   isLoading: false,
@@ -75,13 +73,13 @@ export default class AdminHomeScreen extends Component {
 
   componentDidMount() {
 
-       return fetch( hostAddr + '/VideoAss/ShowAllPokemonList.php')
+       return fetch(hostAddr +'VideoAss/showAllVideo.php')
          .then((response) => response.json())
          .then((responseJson) => {
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
            this.setState({
-			   isLoading: false,
-             dataSource: ds.cloneWithRows(responseJson),
+	       isLoading: false,
+               dataSource: ds.cloneWithRows(responseJson),
            }, function() {
              // In this block you can do something with new state.
            });
@@ -89,9 +87,15 @@ export default class AdminHomeScreen extends Component {
          .catch((error) => {
            console.error(error);
          });
-     }
+  }
+
+    showVideo(video){
+      console.log(this.props);
+	     //this.props.navigation.navigate("VideoPlayer", {'video': video});
+    }
 
   render() {
+
 	  if (this.state.isLoading) {
         return (
           <View style={{flex: 1, paddingTop: 20}}>
@@ -102,53 +106,53 @@ export default class AdminHomeScreen extends Component {
 
     return (
       <View style={styles.container}>
-
-		<TextInput
-		  style={styles.input}
-		  placeholder="Search Text..."
-		  onChangeText={(text) => this.setState({ contentSearch : text })}
-		/>
-
-		<Button
-		  onPress={this.onPressButton}
-		  title="Search"
-		  color="#841584"
-		  accessibilityLabel="Learn more about this purple button"
-		/>
-    <Button
-		  onPress={this.props.screenProps.onLogoutPress}
-		  title="Logout"
-		  color="#841584"
-		/>
+    		<TextInput
+    		  style={styles.input}
+    		  placeholder="Search Text..."
+    		  onChangeText={(text) => this.setState({ contentSearch : text })}
+    		/>
+    		<Button
+    		  onPress={this.onPressButton}
+    		  title="Search"
+    		  color="#841584"
+    		  accessibilityLabel="Learn more about this purple button"
+    		/>
+        <Button
+    		  onPress={this.props.screenProps.onLogoutPress}
+    		  title="Logout"
+    		  color="#841584"
+    		/>
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} />}
-          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+	         renderRow={ (d) => <Row onClick={this.showVideo.bind(this, d.videoPath) } {...d} />}
+            renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
           renderFooter={() => <Footer />}
           renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
         />
       </View>
     );
   }
-}
+  }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 20,
-  },
-  separator: {
-    flex: 1,
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: '#8E8E8E',
-  },
-  input: {
-    height: 15,
-    flex: 1,
-    paddingHorizontal: 8,
-    fontSize: 15,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 2,
-  },
+    //renderRow={(data) => <Row {...data} />}
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      marginTop: 20,
+    },
+    separator: {
+      flex: 1,
+      height: StyleSheet.hairlineWidth,
+      backgroundColor: '#8E8E8E',
+    },
+    input: {
+      height: 60,
+
+      paddingHorizontal: 8,
+      fontSize: 15,
+      backgroundColor: '#FFFFFF',
+      borderRadius: 2,
+    },
 });
