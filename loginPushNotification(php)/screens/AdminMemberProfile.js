@@ -23,53 +23,37 @@ constructor(props) {
 
      TextInput_PokemonName: '',
      TextInput_PokemonLevel: '',
-     TextInput_PokemonImage: '',
 
    }
 
  }
 
- _pickImage = async () => {
-    let pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-	  allowsEditing: true,
-
-      aspect: [4, 3],
-    });
-
-	console.log(pickerResult);
-
-	this.setState({ TextInput_PokemonImage : pickerResult.uri })
-
-  };
 
  InsertPokemonRecordsToServer = () =>{
 	let formData = new FormData();
-	let uri = this.state.TextInput_PokemonImage;
+	//let uri = this.state.TextInput_PokemonImage;
 
   formData.append('pokemonName', this.state.TextInput_PokemonName);
 	formData.append('pokemonLevel', this.state.TextInput_PokemonLevel);
-	//formData.append('pokemonImage', this.state.TextInput_PokemonImage);
-/*
-  formData.append('pokemonImage', {
-    uri,
-    name: `${uri}`,
-    type: 'video/mp4',
-  });*/
-	console.log(uri+'SSS');
+  //console.log(formData)
+
       fetch( hostAddr + 'VideoAss/addMember.php', {
       method: 'POST',
-	  body: formData,
-      headers: {
+	  body: JSON.stringify({
+        'pokemonName' :  this.state.TextInput_PokemonName,
+        'pokemonLevel': this.state.TextInput_PokemonLevel
+    }),
+      /*headers: {
         'Accept': 'application/json',
         'Content-Type': 'multipart/form-data',
-      },
+      },*/
+      dataType: 'json',
 
       }).then((response) => response.json())
           .then((responseJson) => {
 
             // Showing response message coming from server after inserting records.
-            Alert.alert(responseJson);
+            Alert.alert(responseJson.msg);
 
           }).catch((error) => {
             console.error(error);
@@ -93,7 +77,7 @@ constructor(props) {
 
        <TextInput
 
-         placeholder="Enter Pokemon Name"
+         placeholder="Enter User Name"
 
          onChangeText={ TextInputValue => this.setState({ TextInput_PokemonName : TextInputValue }) }
 
@@ -104,7 +88,7 @@ constructor(props) {
 
       <TextInput
 
-         placeholder="Enter Pokemon Level"
+         placeholder="Enter Member Name"
 
          onChangeText={ TextInputValue => this.setState({ TextInput_PokemonLevel : TextInputValue }) }
 
@@ -112,14 +96,6 @@ constructor(props) {
 
          style={styles.TextInputStyleClass}
        />
-
-
-
-	   <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this._pickImage} >
-
-        <Text style={styles.TextStyle}> SELECT VIDEOS </Text>
-
-      </TouchableOpacity>
 
       <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.InsertPokemonRecordsToServer} >
 
