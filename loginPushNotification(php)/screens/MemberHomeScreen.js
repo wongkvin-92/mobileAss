@@ -90,7 +90,8 @@ export default class ListViewDemo extends Component {
   }
 
     showVideo(video){
-	this.props.navigation.navigate("VideoPlayer");
+	
+	this.props.navigation.navigate("VideoPlayer", {'video': video});
     }
 
   render() {
@@ -124,7 +125,7 @@ export default class ListViewDemo extends Component {
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
-	renderRow={ (d) => <Row e="DSAS" {...d} />}
+	renderRow={ (d) => <Row onClick={this.showVideo.bind(this, d.videoPath) } {...d} />}
             renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
           renderFooter={() => <Footer />}
           renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}

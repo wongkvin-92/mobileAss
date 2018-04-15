@@ -13,7 +13,20 @@ var styles = {
 };
 
 export default class VideoCustomScreen extends VideoBaseScreen {
-  render() {
+    constructor(props){
+	super(props);
+	this.state = {
+	    currentURL: null,
+	    onLoad: null
+	};
+    }
+
+    onLoad(){
+	console.log("onLoad: I was called!");
+    }
+    
+    render() {
+	let path = this.props.navigation.state.params.video;
     const COLOR = '#92DCE5';
     const icon = (name, size = 36) => () =>
       <Ionicons
@@ -25,15 +38,18 @@ export default class VideoCustomScreen extends VideoBaseScreen {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container}>
-          <VideoPlayer
-            videoProps={{
+        <VideoPlayer
+	
+	videoProps={{
               shouldPlay: false,
               resizeMode: Video.RESIZE_MODE_CONTAIN,
-              source: {
-                uri: 'http://www.streambox.fr/playlists/test_001/stream.m3u8',
-              },
-              isMuted: false,
-            }}
+            source: {
+		uri:  `http://192.168.0.101/VideoAss/selectSpecificVideo.php?videoName=${path}`
+		//uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+                //uri: 'http://www.streambox.fr/playlists/test_001/stream.m3u8',
+            },
+            isMuted: false,
+        }}
             playIcon={icon('ios-play-outline')}
             pauseIcon={icon('ios-pause-outline')}
             fullscreenEnterIcon={icon('ios-expand-outline', 28)}

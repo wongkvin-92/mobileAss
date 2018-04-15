@@ -57,6 +57,10 @@ export default class MemberStackNavigator extends React.Component {
 	    videoClicked: null
 	};
     }
+
+    showVideo(){
+	
+    }
     
     render() {
 

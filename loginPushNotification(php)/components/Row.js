@@ -24,9 +24,7 @@ const styles = StyleSheet.create({
 const Row = (props) => (
     <TouchableOpacity style={styles.container}
     onPress={
-	() => {
-	    console.log("DSAD");
-	}
+	props.onClick
     }
 
     >
