@@ -26,6 +26,11 @@ var hostAddr = "http://192.168.0.101/";
 
 export default class ListViewDemo extends Component {
 
+  static navigationOptions =
+  {
+     title: 'Member Home Screen',
+  };
+
   constructor(props) {
     super(props);
 
@@ -68,13 +73,13 @@ export default class ListViewDemo extends Component {
 
   componentDidMount() {
 
-       return fetch(hostAddr +'VideoAss/ShowAllVideo.php')
+       return fetch(hostAddr +'VideoAss/showAllVideo.php')
          .then((response) => response.json())
          .then((responseJson) => {
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
            this.setState({
-			   isLoading: false,
-             dataSource: ds.cloneWithRows(responseJson),
+	       isLoading: false,
+               dataSource: ds.cloneWithRows(responseJson),
            }, function() {
              // In this block you can do something with new state.
            });
@@ -82,7 +87,11 @@ export default class ListViewDemo extends Component {
          .catch((error) => {
            console.error(error);
          });
-     }
+  }
+
+    showVideo(video){
+	this.props.navigation.navigate("VideoPlayer");
+    }
 
   render() {
 
@@ -115,17 +124,19 @@ export default class ListViewDemo extends Component {
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} />}
-          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+	renderRow={ (d) => <Row e="DSAS" {...d} />}
+            renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
           renderFooter={() => <Footer />}
           renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
         />
       </View>
     );
   }
-}
+  }
 
-const styles = StyleSheet.create({
+    //renderRow={(data) => <Row {...data} />}
+
+    const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,

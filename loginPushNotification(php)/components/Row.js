@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {Video} from 'expo';
 
 const styles = StyleSheet.create({
@@ -22,17 +22,25 @@ const styles = StyleSheet.create({
 
 
 const Row = (props) => (
-  <View style={styles.container}>
-   <Video source={{ uri: `http://192.168.0.101/VideoAss/images/${props.videoPath}` }}
-	  resizeMode="cover"
-	  shouldPlay={false}
-	  style={styles.photo}
-	/>
+    <TouchableOpacity style={styles.container}
+    onPress={
+	() => {
+	    console.log("DSAD");
+	}
+    }
 
-    <Text style={styles.text}>
-      {`${props.videoId} ${props.videoName}`}
+    >
+    <Video source={{ uri: `http://192.168.0.101/VideoAss/images/${props.videoPath}` }}
+    resizeMode="cover"
+    shouldPlay={false}
+    style={styles.photo}
+    />
+
+    <Text style={styles.text}
+    >
+    {`${props.videoId} ${props.videoName}`}
     </Text>
-  </View>
+    </TouchableOpacity>
 );
 
 export default Row;

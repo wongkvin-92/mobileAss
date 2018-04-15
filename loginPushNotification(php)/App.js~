@@ -28,9 +28,9 @@ export default class App extends React.Component {
     });
   }
 
-    requestFailed = ()=> {
-	this.setState({isLoadingComplete: false});
-    }
+  requestFailed(){
+    this.setState({isLoadingComplete: false});
+  }
 
   testIsLoggedIn(){
     if(this.state.isLoggedIn == true)
@@ -92,6 +92,7 @@ export default class App extends React.Component {
               {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
               {Platform.OS === 'android' &&
                 <View style={styles.statusBarUnderlay} />}
+                  {this.testIsLoggedIn()}
               <RootNavigation
                 setAdmin={this.setAdmin}
                 setMember={this.setMember}

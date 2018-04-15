@@ -51,10 +51,13 @@ export default class AdminLogin extends React.Component {
             .then((responseJson) => {
 
               // Showing response message coming from server updating records.
-              Alert.alert(responseJson);
-              //console.log(this);
-              this.props.screenProps.setAdmin();
-              //this.props.navigation.navigate('Main');
+              Alert.alert(responseJson.msg);
+		//console.log(this);
+		if(responseJson.result)
+                    this.props.screenProps.setAdmin();
+		else
+		    this.props.screenProps.loadFail();
+		//this.props.navigation.navigate('Main');
 
             }).catch((error) => {
               console.error(error);

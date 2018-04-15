@@ -8,212 +8,215 @@ import Exponent, { Constants, ImagePicker, registerRootComponent } from 'expo';
 
 var hostAddr = "http://192.168.0.101/";
 
-class MainActivity extends Component {
+class VideoUpload extends Component {
 
-  static navigationOptions =
-  {
-     title: 'MainActivity',
-  };
+    static navigationOptions =
+	{
+	    title: 'Video Upload',
+	};
 
-constructor(props) {
+    constructor(props) {
 
-   super(props)
+	super(props)
 
-   this.state = {
+	this.state = {
 
-     TextInput_VideoName: '',
-     TextInput_Description: '',
-     TextInput_VideoPath: '',
+	    TextInput_VideoName: '',
+	    TextInput_Description: '',
+	    TextInput_VideoPath: '',
 
-   }
+	}
 
- }
+    }
 
- _pickImage = async () => {
-    let pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-	  allowsEditing: true,
+    _pickImage = async () => {
+	let pickerResult = await ImagePicker.launchImageLibraryAsync({
+	    mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+	    allowsEditing: true,
 
-      aspect: [4, 3],
-    });
+	    aspect: [4, 3],
+	});
 
 	console.log(pickerResult);
 
 	this.setState({ TextInput_VideoPath : pickerResult.uri })
 
-  };
+    };
 
- InsertPokemonRecordsToServer = () =>{
+    InsertPokemonRecordsToServer = () =>{
 	let formData = new FormData();
 	let uri = this.state.TextInput_VideoPath;
 
-  formData.append('pokemonName', this.state.TextInput_VideoName);
-	formData.append('pokemonLevel', this.state.TextInput_Description);
+	formData.append('name', this.state.TextInput_VideoName);
+	formData.append('description', this.state.TextInput_Description);
 	//formData.append('pokemonImage', this.state.TextInput_PokemonImage);
-	formData.append('pokemonImage', {
-    uri,
-    name: `${uri}`,
-    type: 'video/mp4',
-  });
-	console.log(uri+'SSS');
-      fetch(hostAddr + 'ReactNative/InsertPokemonData.php', {
-      method: 'POST',
-	  body: formData,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data',
-      },
+	formData.append('path', {
+	    uri,
+	    name: `${uri}`,
+	    type: 'video/mp4',
+	});
+	
+	if(uri.length == 0){
+	    Alert.alert("Please select a video");
+	    return;
+	}
+	
+	fetch(hostAddr + 'VideoAss/addVideo.php', {
+	    method: 'POST',
+	    body: formData,
+	    headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'multipart/form-data',
+	    },
 
-      }).then((response) => response.json())
+	}).then((response) => response.json())
           .then((responseJson) => {
-
-            // Showing response message coming from server after inserting records.
-            Alert.alert(responseJson);
-
+              // Showing response message coming from server after inserting records.
+              Alert.alert(responseJson);
           }).catch((error) => {
-            console.error(error);
+              console.error(error);
           });
-
-}
-
- GoTo_Show_PokemonList_Activity_Function = () =>
-  {
-    this.props.navigation.navigate('Second');
-
-  }
-
- render() {
-   return (
-
-<View style={styles.MainContainer}>
-
-
-       <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Pokemon Creation </Text>
-
-       <TextInput
-
-         placeholder="Enter Pokemon Name"
-
-         onChangeText={ TextInputValue => this.setState({ TextInput_VideoName : TextInputValue }) }
-
-         underlineColorAndroid='transparent'
-
-         style={styles.TextInputStyleClass}
-       />
-
-      <TextInput
-
-         placeholder="Enter Pokemon Level"
-
-         onChangeText={ TextInputValue => this.setState({ TextInput_Description : TextInputValue }) }
-
-         underlineColorAndroid='transparent'
-
-         style={styles.TextInputStyleClass}
-       />
-
-
-
-	   <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this._pickImage} >
-
-        <Text style={styles.TextStyle}> SELECT VIDEOS </Text>
-
-      </TouchableOpacity>
-
-      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.InsertPokemonRecordsToServer} >
-
-        <Text style={styles.TextStyle}> INSERT POKEMON RECORD TO SERVER </Text>
-
-      </TouchableOpacity>
-
-      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.GoTo_Show_PokemonList_Activity_Function} >
-
-        <Text style={styles.TextStyle}> SHOW ALL INSERTED POKEMON RECORDS IN LISTVIEW </Text>
-
-      </TouchableOpacity>
-
-
-</View>
-
-   );
- }
-}
-
-class ShowPokemonListActivity extends Component {
-
-  constructor(props) {
-
-    super(props);
-
-    this.state = {
-
-      isLoading: true
 
     }
-  }
 
-  static navigationOptions =
-  {
-     title: 'ShowPokemonListActivity',
-  };
+    GoTo_Show_PokemonList_Activity_Function = () =>
+	{
+	    this.props.navigation.navigate('Second');
 
-  componentDidMount() {
+	}
 
-       return fetch(hostAddr + '/ReactNative/ShowAllPokemonList.php')
-         .then((response) => response.json())
-         .then((responseJson) => {
-           let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-           this.setState({
-             isLoading: false,
-             dataSource: ds.cloneWithRows(responseJson),
-           }, function() {
-             // In this block you can do something with new state.
-           });
-         })
-         .catch((error) => {
-           console.error(error);
-         });
-     }
+    render() {
+	return (
 
-     GetStudentIDFunction=(pokemonId,pokemonName, pokemonLevel,pokemonImage)=>{
+	    <View style={styles.MainContainer}>
 
-          this.props.navigation.navigate('Third', {
 
-            id : pokemonId,
-            name : pokemonName,
-            level : pokemonLevel,
-            image1 : pokemonImage
+	    <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> </Text>
 
-          });
+	    <TextInput
 
-     }
+            placeholder="Enter Video Name"
 
-     ListViewItemSeparator = () => {
-       return (
-         <View
-           style={{
-             height: .5,
-             width: "100%",
-             backgroundColor: "#000",
-           }}
-         />
-       );
-     }
+            onChangeText={ TextInputValue => this.setState({ TextInput_VideoName : TextInputValue }) }
 
-     render() {
-      if (this.state.isLoading) {
-        return (
-          <View style={{flex: 1, paddingTop: 20}}>
-            <ActivityIndicator />
-          </View>
-        );
-      }
+            underlineColorAndroid='transparent'
 
-      return (
+            style={styles.TextInputStyleClass}
+	    />
 
-        <View style={styles.MainContainer_For_Show_PokemonList_Activity}>
+	    <TextInput
 
-          <ListView
+            placeholder="Enter Description"
+
+            onChangeText={ TextInputValue => this.setState({ TextInput_Description : TextInputValue }) }
+
+            underlineColorAndroid='transparent'
+
+            style={styles.TextInputStyleClass}
+	    />
+
+
+
+	    <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this._pickImage} >
+
+            <Text style={styles.TextStyle}> SELECT VIDEOS </Text>
+
+	    </TouchableOpacity>
+
+	    <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.InsertPokemonRecordsToServer} >
+
+            <Text style={styles.TextStyle}> INSERT VIDEOS RECORD TO SERVER </Text>
+
+	    </TouchableOpacity>
+
+	    <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.GoTo_Show_PokemonList_Activity_Function} >
+
+            <Text style={styles.TextStyle}> VIDEO RECORDS LISTVIEW </Text>
+
+	    </TouchableOpacity>
+
+
+	    </View>
+
+	);
+    }
+}
+
+class ShowVideoList extends Component {
+
+    constructor(props) {
+
+	super(props);
+
+	this.state = {
+
+	    isLoading: true
+
+	}
+    }
+
+    static navigationOptions =
+	{
+	    title: 'Show Video List',
+	};
+
+    componentDidMount() {
+
+	return fetch(hostAddr + '/VideoAss/ShowAllVideo.php')
+            .then((response) => response.json())
+            .then((responseJson) => {
+		let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+		this.setState({
+		    isLoading: false,
+		    dataSource: ds.cloneWithRows(responseJson),
+		}, function() {
+		    // In this block you can do something with new state.
+		});
+            })
+            .catch((error) => {
+		console.error(error);
+            });
+    }
+
+    GetStudentIDFunction=(videoId, videoName, videoDescription, videoPath)=>{
+
+        this.props.navigation.navigate('Third', {
+
+            id : videoId,
+            name : videoName,
+            level : videoDescription,
+            image1 : videoPath
+
+        });
+
+    }
+
+    ListViewItemSeparator = () => {
+	return (
+            <View
+            style={{
+		height: .5,
+		width: "100%",
+		backgroundColor: "#000",
+            }}
+            />
+	);
+    }
+
+    render() {
+	if (this.state.isLoading) {
+            return (
+		<View style={{flex: 1, paddingTop: 20}}>
+		<ActivityIndicator />
+		</View>
+            );
+	}
+
+	return (
+
+            <View style={styles.MainContainer_For_Show_PokemonList_Activity}>
+
+            <ListView
 
             dataSource={this.state.dataSource}
 
@@ -221,131 +224,135 @@ class ShowPokemonListActivity extends Component {
 
             renderRow={ (rowData) => <Text style={styles.rowViewContainer}
 
-                      onPress={this.GetStudentIDFunction.bind(
-                        this, rowData.pokemonId,
-                         rowData.pokemonName,
-                         rowData.pokemonLevel,
-                         rowData.pokemonImage
-                         )} >
+                onPress={this.GetStudentIDFunction.bind(
+                    this, rowData.videoId,
+                    rowData.videoName,
+                    rowData.videoDescription,
+                    rowData.videoPath
+                )} >
 
-                      {rowData.pokemonName}
+                {rowData.videoName}
 
-                      </Text> }
+                </Text> }
 
-          />
+            />
 
-        </View>
-      );
+            </View>
+	);
     }
 
 }
 
-class EditPokemonRecordActivity extends Component {
+class EditVideoRecord extends Component {
 
-  constructor(props) {
+    constructor(props) {
 
-       super(props)
+	super(props)
 
-       this.state = {
+	this.state = {
 
-         TextInput_VideoId: '',
-         TextInput_VideoName: '',
-         TextInput_Description: '',
-         TextInput_VideoPath: '',
+            TextInput_VideoId: '',
+            TextInput_VideoName: '',
+            TextInput_Description: '',
+            TextInput_VideoPath: '',
 
-       }
+	}
 
-     }
+    }
 
-     componentDidMount(){
+    componentDidMount(){
 
-      // Received Student Details Sent From Previous Activity and Set Into State.
-      this.setState({
-        TextInput_VideoId : this.props.navigation.state.params.id,
-        TextInput_VideoName: this.props.navigation.state.params.name,
-        TextInput_Description: this.props.navigation.state.params.level,
-        TextInput_VideoPath: this.props.navigation.state.params.image1,
-      })
+	// Received Student Details Sent From Previous Activity and Set Into State.
+	this.setState({
+            TextInput_VideoId : this.props.navigation.state.params.id,
+            TextInput_VideoName: this.props.navigation.state.params.name,
+            TextInput_Description: this.props.navigation.state.params.level,
+            TextInput_VideoPath: this.props.navigation.state.params.image1,
+	})
 
-     }
+    }
 
     static navigationOptions =
-    {
-       title: 'EditPokemonRecordActivity',
-    };
+	{
+	    title: 'Edit Video Record',
+	};
 
     UpdatePokemonRecord = () =>{
 
-            fetch(hostAddr + '/ReactNative/UpdatePokemonRecord.php', {
+        fetch(hostAddr + '/VideoAss/updateVideoMember.php', {
             method: 'POST',
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
             },
             body: JSON.stringify({
 
-              pokemonId : this.state.TextInput_VideoId,
+		videoId : this.state.TextInput_VideoId,
 
-              pokemonName : this.state.TextInput_VideoName,
+		videoName : this.state.TextInput_VideoName,
 
-              pokemonLevel : this.state.TextInput_Description,
+		videoDescription : this.state.TextInput_Description,
 
-              pokemonImage : this.state.TextInput_VideoPath
+		videoPath : this.state.TextInput_VideoPath
 
             })
 
-            }).then((response) => response.json())
-                .then((responseJson) => {
+        }).then((response) => response.json())
+          .then((responseJson) => {
 
-                  // Showing response message coming from server updating records.
-                  Alert.alert(responseJson);
+              // Showing response message coming from server updating records.
+              Alert.alert(responseJson);
 
-                }).catch((error) => {
-                  console.error(error);
-                });
+          }).catch((error) => {
+              console.error(error);
+          });
 
-      }
+    }
 
 
     DeletePokemonRecord = () =>{
 
-          fetch(hostAddr + '/ReactNative/DeletePokemonRecord.php', {
-          method: 'POST',
-          headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        fetch(hostAddr + '/VideoAss/deleteVideoMember.php', {
+            method: 'POST',
+	    /*
+            headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
+            },*/
+	    dataType: 'json',
+            body: JSON.stringify({
 
-            pokemonId : this.state.TextInput_VideoId
+		videoId : this.state.TextInput_VideoId
 
-          })
+            })
 
-          }).then((response) => response.json())
+        }).then((response) => {
+	    console.log(response);
+	    return response.json();
+	})
           .then((responseJson) => {
 
-            // Showing response message coming from server after inserting records.
-            Alert.alert(responseJson);
-
+              // Showing response message coming from server after inserting records.
+              Alert.alert(responseJson.msg);
           }).catch((error) => {
-             console.error(error);
+              console.error(error);
           });
 
-          this.props.navigation.navigate('First');
+        this.props.navigation.navigate('First');
 
-      }
+    }
 
     render() {
 
-      return (
+	return (
 
-   <View style={styles.MainContainer}>
+	    <View style={styles.MainContainer}>
 
-          <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Edit Pokemon Record Form </Text>
+            <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> </Text>
 
-          <TextInput
+            <TextInput
 
-            placeholder="Pokemon Name Shows Here"
+            placeholder="Video Name "
 
             value={this.state.TextInput_VideoName}
 
@@ -354,11 +361,11 @@ class EditPokemonRecordActivity extends Component {
             underlineColorAndroid='transparent'
 
             style={styles.TextInputStyleClass}
-          />
+            />
 
-         <TextInput
+            <TextInput
 
-            placeholder="Pokemon Level Shows Here"
+            placeholder="Description"
 
             value={this.state.TextInput_Description}
 
@@ -367,11 +374,11 @@ class EditPokemonRecordActivity extends Component {
             underlineColorAndroid='transparent'
 
             style={styles.TextInputStyleClass}
-          />
+            />
 
-         <TextInput
+            <TextInput
 
-            placeholder="Pokemon Image Shows Here"
+            placeholder="Video"
 
             value={this.state.TextInput_VideoPath}
 
@@ -380,93 +387,93 @@ class EditPokemonRecordActivity extends Component {
             underlineColorAndroid='transparent'
 
             style={styles.TextInputStyleClass}
-          />
+            />
 
-         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.UpdatePokemonRecord} >
+            <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.UpdatePokemonRecord} >
 
-            <Text style={styles.TextStyle}> UPDATE POKEMON RECORD </Text>
+            <Text style={styles.TextStyle}> UPDATE VIDEO RECORD </Text>
 
-         </TouchableOpacity>
+            </TouchableOpacity>
 
-         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.DeletePokemonRecord} >
+            <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.DeletePokemonRecord} >
 
             <Text style={styles.TextStyle}> DELETE CURRENT RECORD </Text>
 
-         </TouchableOpacity>
+            </TouchableOpacity>
 
 
-   </View>
+	    </View>
 
-      );
+	);
     }
 
 }
 
 export default MyNewProject = StackNavigator(
 
-  {
+    {
 
-    First: { screen: MainActivity },
+	First: { screen: VideoUpload },
 
-    Second: { screen: ShowPokemonListActivity },
+	Second: { screen: ShowVideoList },
 
-    Third: { screen: EditPokemonRecordActivity }
+	Third: { screen: EditVideoRecord }
 
-  });
+    });
 
 const styles = StyleSheet.create({
 
-  MainContainer :{
+    MainContainer :{
 
-    alignItems: 'center',
-    flex:1,
-    paddingTop: 30,
-    backgroundColor: '#fff'
-
-  },
-
-  MainContainer_For_Show_StudentList_Activity :{
-
-    flex:1,
-    paddingTop: (Platform.OS == 'ios') ? 20 : 0,
-    marginLeft: 5,
-    marginRight: 5
+	alignItems: 'center',
+	flex:1,
+	paddingTop: 30,
+	backgroundColor: '#fff'
 
     },
 
-  TextInputStyleClass: {
+    MainContainer_For_Show_StudentList_Activity :{
 
-  textAlign: 'center',
-  width: '90%',
-  marginBottom: 7,
-  height: 40,
-  borderWidth: 1,
-  borderColor: '#FF5722',
-  borderRadius: 5 ,
+	flex:1,
+	paddingTop: (Platform.OS == 'ios') ? 20 : 0,
+	marginLeft: 5,
+	marginRight: 5
 
-  },
+    },
 
-  TouchableOpacityStyle: {
+    TextInputStyleClass: {
 
-    paddingTop:10,
-    paddingBottom:10,
-    borderRadius:5,
-    marginBottom:7,
-    width: '90%',
-    backgroundColor: '#00BCD4'
+	textAlign: 'center',
+	width: '90%',
+	marginBottom: 7,
+	height: 40,
+	borderWidth: 1,
+	borderColor: '#FF5722',
+	borderRadius: 5 ,
 
-  },
+    },
 
-  TextStyle:{
-    color:'#fff',
-    textAlign:'center',
-  },
+    TouchableOpacityStyle: {
 
-  rowViewContainer: {
-    fontSize: 20,
-    paddingRight: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-  }
+	paddingTop:10,
+	paddingBottom:10,
+	borderRadius:5,
+	marginBottom:7,
+	width: '90%',
+	backgroundColor: '#00BCD4'
+
+    },
+
+    TextStyle:{
+	color:'#fff',
+	textAlign:'center',
+    },
+
+    rowViewContainer: {
+	fontSize: 20,
+	paddingRight: 10,
+	paddingTop: 10,
+	paddingBottom: 10,
+    }
 
 });

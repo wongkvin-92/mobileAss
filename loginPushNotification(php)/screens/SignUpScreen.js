@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Button, Text, Alert } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { FormLabel, FormInput } from 'react-native-elements';
 import { Permissions, Notifications, MailComposer } from 'expo';
@@ -22,6 +22,7 @@ export default class signup extends React.Component {
         return;
       }
     }
+    
   signUpMemberPress = async () =>{
       // Get the token that uniquely identifies this device
       let token = await Notifications.getExpoPushTokenAsync();
@@ -47,19 +48,27 @@ export default class signup extends React.Component {
 
         fetch('http://192.168.0.101/VideoAss/signUp.php', {
         method: 'POST',
-        headers: {
+        /*headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        },
+           }*/
+	dataType: 'json',
         body: JSON.stringify(d)
 
         }).then(
+	    (r) => {
+		console.log(r);
+		return r.json();
+	    }
+	    
+	)
+	  .then(
           (response) => {
-            //console.log(response);
-            var r = JSON.parse(response._bodyText);
-            console.log(r);
-            alert(r.msg);
-            this.props.navigation.navigate('Login');
+            console.log(response);
+            //var r = JSON.parse(response._bodyText);
+              //alert(.msg);
+	      Alert.alert(response.msg);   
+	      this.props.navigation.navigate('Login');
 
           //response.json()
             //var r = JSON.parse(response);
@@ -69,7 +78,8 @@ export default class signup extends React.Component {
 
             .catch((error) => {
               console.error(error);
-              //Alert.alert(error);
+		this.setState({loading: false});
+		//Alert.alert(error);
             });
 
             fetch(PUSH_ENDPOINT, {
@@ -81,9 +91,9 @@ export default class signup extends React.Component {
                body: JSON.stringify({
           		  "to": token,
           		  "sound": "default",
-          		  "body": "Hello world!",
+          		  "body": "Code : 4444",
           		  //"data": "{['DDD']}",
-          		  "title": "Just for fun"
+          		  "title": "Verification Code"
           		}),
              });
 

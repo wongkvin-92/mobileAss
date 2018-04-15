@@ -1,230 +1,473 @@
-import React from 'react';
-import {
-  AppRegistry,
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { WebBrowser } from 'expo';
+import React, { Component } from 'react';
 
-import { MonoText } from '../components/StyledText';
-import AdminNavigator from '../navigation/AdminTabNavigator';
-//import {NotificationsAndroid} from 'react-native-notifications';
+import { StyleSheet, View, Alert, TextInput, Button, Text, Platform, TouchableOpacity, ListView, ActivityIndicator } from 'react-native';
 
+import { StackNavigator } from 'react-navigation';
 
-export default class HomeScreen extends React.Component {
-	componentDidMount() {
+import Exponent, { Constants, ImagePicker, registerRootComponent } from 'expo';
 
-		this.listener = Expo.Notifications.addListener(this.handleNotification);
+var hostAddr = "http://192.168.0.101/";
 
-	}
+class MainActivity extends Component {
 
-	  componentWillUnmount() {
-		this.listener && this.listener.remove();
-	  }
-
-	  handleNotification = ({ origin, data }) => {
-		console.log(
-		  `Push notification ${origin} with data: ${JSON.stringify(data)}`,
-		);
-		<AdminNavigator />
-	  };
-
-
-
-  static navigationOptions = {
-    header: "AdminMemberProfile",
+  static navigationOptions =
+  {
+     title: 'MainActivity',
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
+constructor(props) {
 
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
+   super(props)
 
-            <Text style={styles.getStartedText}>Get started by opening</Text>
+   this.state = {
 
-            <View
-              style={[
-                styles.codeHighlightContainer,
-                styles.homeScreenFilename,
-              ]}>
-              <MonoText style={styles.codeHighlightText}>
-                screens/HomeScreen.js
-              </MonoText>
-            </View>
+     TextInput_PokemonName: '',
+     TextInput_PokemonLevel: '',
+     TextInput_PokemonImage: '',
 
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-          </View>
+   }
 
-          <View style={styles.helpContainer}>
-            <TouchableOpacity
-              onPress={this._handleHelpPress}
-              style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>
-                Help, it didn’t automatically reload!
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+ }
 
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>
-            This is a tab bar. You can edit it in:
-          </Text>
+ _pickImage = async () => {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+	  allowsEditing: true,
 
-          <View
-            style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>
-              navigation/MainTabNavigator.js
-            </MonoText>
-          </View>
-        </View>
-      </View>
-    );
+      aspect: [4, 3],
+    });
+
+	console.log(pickerResult);
+
+	this.setState({ TextInput_PokemonImage : pickerResult.uri })
+
+  };
+
+ InsertPokemonRecordsToServer = () =>{
+	let formData = new FormData();
+	let uri = this.state.TextInput_PokemonImage;
+
+  formData.append('pokemonName', this.state.TextInput_PokemonName);
+	formData.append('pokemonLevel', this.state.TextInput_PokemonLevel);
+	//formData.append('pokemonImage', this.state.TextInput_PokemonImage);
+/*
+  formData.append('pokemonImage', {
+    uri,
+    name: `${uri}`,
+    type: 'video/mp4',
+  });*/
+	console.log(uri+'SSS');
+      fetch( hostAddr + 'VideoAss/addMember.php', {
+      method: 'POST',
+	  body: formData,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+
+      }).then((response) => response.json())
+          .then((responseJson) => {
+
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+
+          }).catch((error) => {
+            console.error(error);
+          });
+
+}
+
+ GoTo_Show_PokemonList_Activity_Function = () =>
+  {
+    this.props.navigation.navigate('Second');
+
   }
 
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
+ render() {
+   return (
 
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use
-          useful development tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
+<View style={styles.MainContainer}>
+
+
+       <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Pokemon Creation </Text>
+
+       <TextInput
+
+         placeholder="Enter Pokemon Name"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_PokemonName : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+      <TextInput
+
+         placeholder="Enter Pokemon Level"
+
+         onChangeText={ TextInputValue => this.setState({ TextInput_PokemonLevel : TextInputValue }) }
+
+         underlineColorAndroid='transparent'
+
+         style={styles.TextInputStyleClass}
+       />
+
+
+
+	   <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this._pickImage} >
+
+        <Text style={styles.TextStyle}> SELECT VIDEOS </Text>
+
+      </TouchableOpacity>
+
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.InsertPokemonRecordsToServer} >
+
+        <Text style={styles.TextStyle}> INSERT POKEMON RECORD TO SERVER </Text>
+
+      </TouchableOpacity>
+
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.GoTo_Show_PokemonList_Activity_Function} >
+
+        <Text style={styles.TextStyle}> SHOW ALL INSERTED POKEMON RECORDS IN LISTVIEW </Text>
+
+      </TouchableOpacity>
+
+
+</View>
+
+   );
+ }
+}
+
+class ShowPokemonListActivity extends Component {
+
+  constructor(props) {
+
+    super(props);
+
+    this.state = {
+
+      isLoading: true
+
     }
   }
 
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/development-mode'
-    );
+  static navigationOptions =
+  {
+     title: 'ShowPokemonListActivity',
   };
 
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
+  componentDidMount() {
+
+       return fetch(hostAddr + 'ReactNative/ShowAllPokemonList.php')
+         .then((response) => response.json())
+         .then((responseJson) => {
+           let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+           this.setState({
+             isLoading: false,
+             dataSource: ds.cloneWithRows(responseJson),
+           }, function() {
+             // In this block you can do something with new state.
+           });
+         })
+         .catch((error) => {
+           console.error(error);
+         });
+     }
+
+     GetStudentIDFunction=(pokemonId,pokemonName, pokemonLevel,pokemonImage)=>{
+
+          this.props.navigation.navigate('Third', {
+
+            id : pokemonId,
+            name : pokemonName,
+            level : pokemonLevel,
+            image1 : pokemonImage
+
+          });
+
+     }
+
+     ListViewItemSeparator = () => {
+       return (
+         <View
+           style={{
+             height: .5,
+             width: "100%",
+             backgroundColor: "#000",
+           }}
+         />
+       );
+     }
+
+     render() {
+      if (this.state.isLoading) {
+        return (
+          <View style={{flex: 1, paddingTop: 20}}>
+            <ActivityIndicator />
+          </View>
+        );
+      }
+
+      return (
+
+        <View style={styles.MainContainer_For_Show_PokemonList_Activity}>
+
+          <ListView
+
+            dataSource={this.state.dataSource}
+
+            renderSeparator= {this.ListViewItemSeparator}
+
+            renderRow={ (rowData) => <Text style={styles.rowViewContainer}
+
+                      onPress={this.GetStudentIDFunction.bind(
+                        this, rowData.pokemonId,
+                         rowData.pokemonName,
+                         rowData.pokemonLevel,
+                         rowData.pokemonImage
+                         )} >
+
+                      {rowData.pokemonName}
+
+                      </Text> }
+
+          />
+
+        </View>
+      );
+    }
+
 }
 
+class EditPokemonRecordActivity extends Component {
+
+  constructor(props) {
+
+       super(props)
+
+       this.state = {
+
+         TextInput_PokemonId: '',
+         TextInput_PokemonName: '',
+         TextInput_PokemonLevel: '',
+         TextInput_PokemonImage: '',
+
+       }
+
+     }
+
+     componentDidMount(){
+
+      // Received Student Details Sent From Previous Activity and Set Into State.
+      this.setState({
+        TextInput_PokemonId : this.props.navigation.state.params.id,
+        TextInput_PokemonName: this.props.navigation.state.params.name,
+        TextInput_PokemonLevel: this.props.navigation.state.params.level,
+        TextInput_PokemonImage: this.props.navigation.state.params.image1,
+      })
+
+     }
+
+    static navigationOptions =
+    {
+       title: 'EditPokemonRecordActivity',
+    };
+
+    UpdatePokemonRecord = () =>{
+
+            fetch(hostAddr + 'ReactNative/UpdatePokemonRecord.php', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+
+              pokemonId : this.state.TextInput_PokemonId,
+
+              pokemonName : this.state.TextInput_PokemonImage,
+
+              pokemonLevel : this.state.TextInput_PokemonLevel,
+
+              pokemonImage : this.state.TextInput_PokemonImage
+
+            })
+
+            }).then((response) => response.json())
+                .then((responseJson) => {
+
+                  // Showing response message coming from server updating records.
+                  Alert.alert(responseJson);
+
+                }).catch((error) => {
+                  console.error(error);
+                });
+
+      }
+
+
+    DeletePokemonRecord = () =>{
+
+          fetch(hostAddr + 'ReactNative/DeletePokemonRecord.php', {
+          method: 'POST',
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+
+            pokemonId : this.state.TextInput_PokemonId
+
+          })
+
+          }).then((response) => response.json())
+          .then((responseJson) => {
+
+            // Showing response message coming from server after inserting records.
+            Alert.alert(responseJson);
+
+          }).catch((error) => {
+             console.error(error);
+          });
+
+          this.props.navigation.navigate('First');
+
+      }
+
+    render() {
+
+      return (
+
+   <View style={styles.MainContainer}>
+
+          <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Edit Pokemon Record Form </Text>
+
+          <TextInput
+
+            placeholder="Pokemon Name Shows Here"
+
+            value={this.state.TextInput_PokemonName}
+
+            onChangeText={ TextInputValue => this.setState({ TextInput_PokemonName : TextInputValue }) }
+
+            underlineColorAndroid='transparent'
+
+            style={styles.TextInputStyleClass}
+          />
+
+         <TextInput
+
+            placeholder="Pokemon Level Shows Here"
+
+            value={this.state.TextInput_PokemonLevel}
+
+            onChangeText={ TextInputValue => this.setState({ TextInput_PokemonLevel : TextInputValue }) }
+
+            underlineColorAndroid='transparent'
+
+            style={styles.TextInputStyleClass}
+          />
+
+         <TextInput
+
+            placeholder="Pokemon Image Shows Here"
+
+            value={this.state.TextInput_PokemonImage}
+
+            onChangeText={ TextInputValue => this.setState({ TextInput_PokemonImage : TextInputValue }) }
+
+            underlineColorAndroid='transparent'
+
+            style={styles.TextInputStyleClass}
+          />
+
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.UpdatePokemonRecord} >
+
+            <Text style={styles.TextStyle}> UPDATE POKEMON RECORD </Text>
+
+         </TouchableOpacity>
+
+         <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.DeletePokemonRecord} >
+
+            <Text style={styles.TextStyle}> DELETE CURRENT RECORD </Text>
+
+         </TouchableOpacity>
+
+
+   </View>
+
+      );
+    }
+
+}
+
+export default MyNewProject = StackNavigator(
+
+  {
+
+    First: { screen: MainActivity },
+
+    Second: { screen: ShowPokemonListActivity },
+
+    Third: { screen: EditPokemonRecordActivity }
+
+  });
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
+
+  MainContainer :{
+
+    alignItems: 'center',
+    flex:1,
     paddingTop: 30,
+    backgroundColor: '#fff'
+
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+
+  MainContainer_For_Show_StudentList_Activity :{
+
+    flex:1,
+    paddingTop: (Platform.OS == 'ios') ? 20 : 0,
+    marginLeft: 5,
+    marginRight: 5
+
+    },
+
+  TextInputStyleClass: {
+
+  textAlign: 'center',
+  width: '90%',
+  marginBottom: 7,
+  height: 40,
+  borderWidth: 1,
+  borderColor: '#FF5722',
+  borderRadius: 5 ,
+
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
+
+  TouchableOpacityStyle: {
+
+    paddingTop:10,
+    paddingBottom:10,
+    borderRadius:5,
+    marginBottom:7,
+    width: '90%',
+    backgroundColor: '#00BCD4'
+
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
+
+  TextStyle:{
+    color:'#fff',
+    textAlign:'center',
   },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
+
+  rowViewContainer: {
+    fontSize: 20,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+  }
+
 });

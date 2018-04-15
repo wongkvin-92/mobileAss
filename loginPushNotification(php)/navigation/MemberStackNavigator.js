@@ -5,7 +5,7 @@ import { StackNavigator, TabNavigator} from 'react-navigation';
 
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
-//import VideoCustomScreen from '../screens/VideoCustomScreen';
+import VideoCustomScreen from '../screens/VideoCustomScreen';
 
 import MemberHomeScreen from '../screens/MemberHomeScreen';
 //import MemberUploadVideo from '../screens/MemberUploadVideo';
@@ -14,13 +14,20 @@ const _MemberStackNavigator = StackNavigator(
     MemberHomeScreen: {
       screen: MemberHomeScreen
     },
-
+    
         //screen: Login
-        /*
+
     VideoPlayer:{
-      screen: VideoCustomScreen
+	screen: VideoCustomScreen,
+	navigationOptions: {
+	    tabBarVisible: true,
+	    title: 'Video Player',
+	    headerStyle: { backgroundColor: '#2196f3' },
+	    headerTintColor: '#fff'
+	}
+
     },
-*/
+      
 /*
     Main: {
       screen: MainTabNavigator,

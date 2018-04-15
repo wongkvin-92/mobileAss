@@ -26,11 +26,9 @@ export default class MemberLogin extends React.Component {
       }
 
       handleNotification = ({ origin, data }) => {
-
+	  
       };
-
-
-
+    
     onSignUpPress(){
       this.props.navigation.navigate('SignUp');
     }
@@ -62,7 +60,10 @@ export default class MemberLogin extends React.Component {
 
                   // Showing response message coming from server updating records.
                   Alert.alert(responseJson.msg);
-                  this.props.screenProps.setMember();
+                  if(responseJson.result)
+                      this.props.screenProps.setMember();
+		    else
+			this.props.screenProps.loadFail();
                   //this.props.navigation.navigate('MainTaNavigator');
 
                 }).catch((error) => {
