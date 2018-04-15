@@ -90,7 +90,7 @@ export default class ListViewDemo extends Component {
   }
 
     showVideo(video){
-	
+
 	this.props.navigation.navigate("VideoPlayer", {'video': video});
     }
 
@@ -137,22 +137,22 @@ export default class ListViewDemo extends Component {
 
     //renderRow={(data) => <Row {...data} />}
 
-    const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 20,
-  },
-  separator: {
-    flex: 1,
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: '#8E8E8E',
-  },
-  input: {
-    height: 60,
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      marginTop: 20,
+    },
+    separator: {
+      flex: 1,
+      height: StyleSheet.hairlineWidth,
+      backgroundColor: '#8E8E8E',
+    },
+    input: {
+      height: 60,
 
-    paddingHorizontal: 8,
-    fontSize: 15,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 2,
-  },
+      paddingHorizontal: 8,
+      fontSize: 15,
+      backgroundColor: '#FFFFFF',
+      borderRadius: 2,
+    },
 });

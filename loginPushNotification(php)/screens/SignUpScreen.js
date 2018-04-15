@@ -22,7 +22,7 @@ export default class signup extends React.Component {
         return;
       }
     }
-    
+
   signUpMemberPress = async () =>{
       // Get the token that uniquely identifies this device
       let token = await Notifications.getExpoPushTokenAsync();
@@ -41,7 +41,6 @@ export default class signup extends React.Component {
       };
       console.log(JSON.stringify(d));
 
-
         this.setState({ error: '', loading: true });
 
         const { username, password, name,  genre} = this.state;
@@ -52,65 +51,59 @@ export default class signup extends React.Component {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
            }*/
-	dataType: 'json',
+	      dataType: 'json',
         body: JSON.stringify(d)
 
         }).then(
-	    (r) => {
-		console.log(r);
-		return r.json();
-	    }
-	    
-	)
+	       (r) => {
+    		 console.log(r);
+    		 return r.json();
+	    })
 	  .then(
           (response) => {
             console.log(response);
             //var r = JSON.parse(response._bodyText);
               //alert(.msg);
-	      Alert.alert(response.msg);   
-	      this.props.navigation.navigate('Login');
+    	      Alert.alert(response.msg);
+    	      this.props.navigation.navigate('Login');
 
           //response.json()
             //var r = JSON.parse(response);
 
-            }
-        )
+        })
 
-            .catch((error) => {
-              console.error(error);
-		this.setState({loading: false});
-		//Alert.alert(error);
-            });
+        .catch((error) => {
+          console.error(error);
+          this.setState({loading: false});
+            //Alert.alert(error);
+        });
 
-            fetch(PUSH_ENDPOINT, {
-               method: 'POST',
-               headers: {
-                 Accept: 'application/json',
-                 'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-          		  "to": token,
-          		  "sound": "default",
-          		  "body": "Code : 4444",
-          		  //"data": "{['DDD']}",
-          		  "title": "Verification Code"
-          		}),
-             });
-
+        fetch(PUSH_ENDPOINT, {
+           method: 'POST',
+           headers: {
+             Accept: 'application/json',
+             'Content-Type': 'application/json',
+           },
+           body: JSON.stringify({
+        		  "to": token,
+        		  "sound": "default",
+        		  "body": "Code: 4444",
+        		  //"data": "{['DDD']}",
+        		  "title": "Verification Code"
+      		 }),
+         });
     }
 
     renderButtonOrLoading() {
         if (this.state.loading) {
             return <Text> Loading </Text>
         }
-        return <View>
-
+        return
+          <View>
             <Button
                 onPress={this.signUpMemberPress.bind(this)}
                 title='Sign up'/>
-
-        </View>
-
+          </View>
     }
     render() {
         return (
@@ -144,10 +137,6 @@ export default class signup extends React.Component {
                 {this.renderButtonOrLoading()}
 
             </View>
-
         )
-
     }
-
-
 }

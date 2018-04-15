@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, Text } from 'react-native';
+import { StyleSheet, View, Button, Text } from 'react-native';
 import MainTaNavigator from '../navigation/MainTabNavigator';
 import { StackNavigator } from 'react-navigation';
 import { FormLabel, FormInput } from 'react-native-elements';
@@ -8,7 +8,7 @@ import { Permissions, Notifications, MailComposer } from 'expo';
 export default class login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { email: 'Test@test.com', password: '123456', error: '', loading: false };
+        this.state = { email: 'Test@test.com', password: '123456', error: '', loading: false , bodyText: 'This is not really a bird nest.'};
     }
     componentDidMount() {
 
@@ -134,12 +134,14 @@ export default class login extends React.Component {
                  placeholder='john@icloud.com'
                  />
                 <FormLabel>Password</FormLabel>
+
                 <FormInput
                 value = {this.state.password}
                 secureTextEntry
                 placeholder='*******'
                 onChangeText={password => this.setState({ password })}
                 />
+
                 <Text>{this.state.error}</Text>
                 {this.renderButtonOrLoading()}
 
@@ -148,6 +150,4 @@ export default class login extends React.Component {
         )
 
     }
-
-
-}
+  }

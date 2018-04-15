@@ -55,12 +55,12 @@ class VideoUpload extends Component {
 	    name: `${uri}`,
 	    type: 'video/mp4',
 	});
-	
+
 	if(uri.length == 0){
 	    Alert.alert("Please select a video");
 	    return;
 	}
-	
+
 	fetch(hostAddr + 'VideoAss/addVideo.php', {
 	    method: 'POST',
 	    body: formData,
@@ -424,12 +424,10 @@ export default MyNewProject = StackNavigator(
 const styles = StyleSheet.create({
 
     MainContainer :{
-
-	alignItems: 'center',
-	flex:1,
-	paddingTop: 30,
-	backgroundColor: '#fff'
-
+    	alignItems: 'center',
+    	flex:1,
+    	paddingTop: 30,
+    	backgroundColor: '#fff'
     },
 
     MainContainer_For_Show_StudentList_Activity :{

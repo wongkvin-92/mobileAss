@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, Text, Alert } from 'react-native';
+import { StyleSheet, View, Button, Text, Alert } from 'react-native';
 import MainTaNavigator from '../navigation/MainTabNavigator';
 import { StackNavigator } from 'react-navigation';
 import { FormLabel, FormInput } from 'react-native-elements';
@@ -26,9 +26,9 @@ export default class MemberLogin extends React.Component {
       }
 
       handleNotification = ({ origin, data }) => {
-	  
+
       };
-    
+
     onSignUpPress(){
       this.props.navigation.navigate('SignUp');
     }
@@ -107,12 +107,21 @@ export default class MemberLogin extends React.Component {
                 />
                 <Text>{this.state.error}</Text>
                 {this.renderButtonOrLoading()}
-
+                <Text style={styles.TextStyle}>Note: For the first login, kindly enter verification code at Password field.</Text>
             </View>
 
         )
 
     }
 
-
 }
+
+const styles = StyleSheet.create({
+
+  TextStyle:{
+    paddingTop: 30,
+    color:'#000000',
+    textAlign:'center',
+    fontSize: 14,
+  }
+});

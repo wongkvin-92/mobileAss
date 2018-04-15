@@ -35,18 +35,6 @@ const RootStackNavigator = StackNavigator(
     SignUp:{
       screen: SignUp
     },
-    
-    /*
-    Main: {
-      screen: MainTabNavigator,
-    },
-    Video:{
-      screen: VideoScreen,
-    },*/
-  /*
-    AddVideo:{
-      screen: MemberCRUDvideo,
-    },*/
 
   },
   {

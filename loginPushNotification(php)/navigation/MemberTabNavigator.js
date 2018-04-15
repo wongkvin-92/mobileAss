@@ -10,7 +10,7 @@ import MemberUploadVideo from '../screens/MemberUploadVideo';
 const MemberNavigator =  TabNavigator(
   {
 
-    MemberHomeScreen: {
+    HomeScreen: {
       screen: MemberStackNavigator,
     },
 
@@ -45,10 +45,9 @@ const MemberNavigator =  TabNavigator(
         );
       },
     }),
-    tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     animationEnabled: false,
-    swipeEnabled: false,
+    swipeEnabled: true,
   }
 );
 
