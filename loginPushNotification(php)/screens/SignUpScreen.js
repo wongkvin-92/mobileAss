@@ -4,7 +4,7 @@ import { StackNavigator } from 'react-navigation';
 import { FormLabel, FormInput } from 'react-native-elements';
 import { Permissions, Notifications, MailComposer } from 'expo';
 
-const PUSH_ENDPOINT = 'https://exp.host/--/api/v2/push/send';
+
 
 export default class signup extends React.Component {
     constructor(props) {

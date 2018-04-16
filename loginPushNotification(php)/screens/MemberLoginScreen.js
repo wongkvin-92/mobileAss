@@ -59,13 +59,11 @@ export default class MemberLogin extends React.Component {
                 .then((responseJson) => {
 
                   // Showing response message coming from server updating records.
-                  Alert.alert(responseJson.msg);
                   if(responseJson.result)
                       this.props.screenProps.setMember();
-		    else
-			this.props.screenProps.loadFail();
+		              else
+			               this.props.screenProps.loadFail();
                   //this.props.navigation.navigate('MainTaNavigator');
-
                 }).catch((error) => {
                   console.error(error);
                   Alert.alert(error);

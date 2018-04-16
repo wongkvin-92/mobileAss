@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     fontSize: 16,
   },
+  small:{
+    fontSize: 11
+  },
   photo: {
     height: 40,
     width: 40,
@@ -36,7 +39,10 @@ const Row = (props) => (
 
     <Text style={styles.text}
     >
-    {`${props.videoId} ${props.videoName}`}
+    {`${props.videoName}`}
+    </Text>
+    <Text style={styles.small}>
+      {"     "}views: {`${props.watchedNum}`}
     </Text>
     </TouchableOpacity>
 );

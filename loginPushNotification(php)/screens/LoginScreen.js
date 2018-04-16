@@ -8,7 +8,7 @@ import { Permissions, Notifications, MailComposer } from 'expo';
 export default class login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { email: 'Test@test.com', password: '123456', error: '', loading: false , bodyText: 'This is not really a bird nest.'};
+        this.state = { email: 'Test@test.com', password: '123456', error: '', loading: false };
     }
     componentDidMount() {
 

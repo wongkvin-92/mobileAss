@@ -7,11 +7,13 @@ import Colors from '../constants/Colors';
 
 import AdminHomeScreen from '../screens/AdminHomeScreen';
 import AdminMemberProfile from '../screens/AdminMemberProfile';
+import AdminStack from '../navigation/AdminStack'
 
 const AdminNavigator =  TabNavigator(
   {
-    AdminHomeScreen: {
-      screen: AdminHomeScreen,
+      AdminStack:
+    {
+      screen:  AdminStack
     },
     AdminMemberProfile: {
       screen: AdminMemberProfile,
@@ -26,7 +28,7 @@ const AdminNavigator =  TabNavigator(
         const { adminRouteName } = navigation.state;
         let iconName;
         switch (adminRouteName) {
-          case 'AdminHomeScreen':
+          case 'AdminStack':
             iconName = Platform.OS === 'ios'
               ? `ios-information-circle${focused ? '' : '-outline'}`
               : 'md-information-circle';

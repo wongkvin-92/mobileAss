@@ -269,7 +269,7 @@ class EditPokemonRecordActivity extends Component {
 
     static navigationOptions =
     {
-       title: 'EditPokemonRecordActivity',
+       title: 'Edit Member Record',
     };
 
     UpdatePokemonRecord = () =>{

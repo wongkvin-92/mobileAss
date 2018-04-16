@@ -6,22 +6,25 @@ import Login from '../screens/LoginScreen';
 import SignUp from '../screens/SignUpScreen';
 import AdminTabNavigator from './AdminTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
+import VideoCustomScreen2 from '../screens/VideoCustomScreen2';
+import AdminHomeScreen from '../screens/AdminHomeScreen';
 
 const AdminStackNavigator = StackNavigator(
   {
     Admin: {
-      screen: AdminTabNavigator
+      screen: AdminHomeScreen
     },
     VideoPlayer:{
-	screen: VideoCustomScreen,
-	navigationOptions: {
-	    tabBarVisible: true,
-	    title: 'Video Player',
-	    headerStyle: { backgroundColor: '#2196f3' },
-	    headerTintColor: '#fff'
-	}
+    	screen: VideoCustomScreen2,
+    	navigationOptions: {
+    	    tabBarVisible: true,
+    	    title: 'Video Player',
+    	    headerStyle: { backgroundColor: '#2196f3' },
+    	    headerTintColor: '#fff'
+	       }
+       }
 },
-  },
+
   {
     navigationOptions: () => ({
       headerTitleStyle: {
@@ -34,6 +37,6 @@ const AdminStackNavigator = StackNavigator(
 export default class AdminNavigator extends React.Component {
   render() {
 
-    return <AdminStackNavigator />;
+    return <AdminStackNavigator screenProps={this.props.screenProps}/>;
   }
 }

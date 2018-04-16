@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Alert, TextInput, Button, Text, Platform, TouchableOpacity, ListView, ActivityIndicator } from 'react-native';
+import { AppRegistry, StyleSheet, View, Alert, TextInput, Button, Text, Platform, TouchableOpacity, ListView, ActivityIndicator } from 'react-native';
 
 import { StackNavigator } from 'react-navigation';
 
 import Exponent, { Constants, ImagePicker, registerRootComponent } from 'expo';
 
-var hostAddr = "http://10.125.192.24/";
+import MemberRow from '../components/MemberRow'
+import Header from '../components/Header'
+import SectionHeader from '../components/SectionHeader'
+import Footer from '../components/Footer'
+
+var hostAddr = "http://192.168.0.101/";
 
 class MainActivity extends Component {
 
@@ -21,35 +26,41 @@ constructor(props) {
 
    this.state = {
 
-     TextInput_PokemonName: '',
+     TextInput_UserName: '',
      TextInput_PokemonLevel: '',
-
+     TextInput_Password: ''
    }
 
  }
 
 
  InsertPokemonRecordsToServer = () =>{
-	let formData = new FormData();
+	//let formData = new FormData();
 	//let uri = this.state.TextInput_PokemonImage;
 
-  formData.append('pokemonName', this.state.TextInput_PokemonName);
-	formData.append('pokemonLevel', this.state.TextInput_PokemonLevel);
+  //formData.append('pokemonName', this.state.TextInput_UserName);
+	//formData.append('pokemonLevel', this.state.TextInput_PokemonLevel);
+  //formData.append('password', this.state.TextInput_Password);
   //console.log(formData)
-
+console.log(this.state);
       fetch( hostAddr + 'VideoAss/addMember.php', {
       method: 'POST',
-	  body: JSON.stringify({
-        'pokemonName' :  this.state.TextInput_PokemonName,
-        'pokemonLevel': this.state.TextInput_PokemonLevel
-    }),
-      /*headers: {
+  	  body: JSON.stringify({
+          'pokemonName' :  this.state.TextInput_UserName,
+          'pokemonLevel': this.state.TextInput_PokemonLevel,
+          'password' : this.state.TextInput_Password,
+      }),
+      headers: {
         'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data',
-      },*/
-      dataType: 'json',
+        'Content-Type': 'application/json',
+      },
+      //dataType: 'json',
 
-      }).then((response) => response.json())
+    }).then((response) => {
+      console.log(response);
+      return response.json();
+
+    })
           .then((responseJson) => {
 
             // Showing response message coming from server after inserting records.
@@ -67,6 +78,11 @@ constructor(props) {
 
   }
 
+  showMemberList = () => {
+    console.log(this.props);
+    this.props.navigation.navigate('Fourth');
+  }
+
  render() {
    return (
 
@@ -79,7 +95,7 @@ constructor(props) {
 
          placeholder="Enter User Name"
 
-         onChangeText={ TextInputValue => this.setState({ TextInput_PokemonName : TextInputValue }) }
+         onChangeText={ TextInputValue => this.setState({ TextInput_UserName : TextInputValue }) }
 
          underlineColorAndroid='transparent'
 
@@ -97,18 +113,34 @@ constructor(props) {
          style={styles.TextInputStyleClass}
        />
 
+       <TextInput
+
+          placeholder="Enter Password"
+
+          onChangeText={ TextInputValue => this.setState({ TextInput_Password : TextInputValue }) }
+
+          underlineColorAndroid='transparent'
+
+          style={styles.TextInputStyleClass}
+        />
+
       <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.InsertPokemonRecordsToServer} >
 
-        <Text style={styles.TextStyle}> INSERT POKEMON RECORD TO SERVER </Text>
+        <Text style={styles.TextStyle}> ADD MEMBER TO SERVER </Text>
 
       </TouchableOpacity>
 
       <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.GoTo_Show_PokemonList_Activity_Function} >
 
-        <Text style={styles.TextStyle}> SHOW ALL INSERTED POKEMON RECORDS IN LISTVIEW </Text>
+        <Text style={styles.TextStyle}> SHOW ALL MEMBER RECORDS IN LISTVIEW </Text>
 
       </TouchableOpacity>
 
+      <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.showMemberList.bind(this)} >
+
+        <Text style={styles.TextStyle}> SEARCH MEMBER </Text>
+
+      </TouchableOpacity>
 
 </View>
 
@@ -131,12 +163,12 @@ class ShowPokemonListActivity extends Component {
 
   static navigationOptions =
   {
-     title: 'ShowPokemonListActivity',
+     title: 'Member List',
   };
 
   componentDidMount() {
 
-       return fetch(hostAddr + 'ReactNative/ShowAllPokemonList.php')
+       return fetch(hostAddr + 'VideoAss/showAllMembers.php')
          .then((response) => response.json())
          .then((responseJson) => {
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -152,14 +184,14 @@ class ShowPokemonListActivity extends Component {
          });
      }
 
-     GetStudentIDFunction=(pokemonId,pokemonName, pokemonLevel,pokemonImage)=>{
+     GetStudentIDFunction=(memberId,userName, memberName, password)=>{
 
           this.props.navigation.navigate('Third', {
 
-            id : pokemonId,
-            name : pokemonName,
-            level : pokemonLevel,
-            image1 : pokemonImage
+            id : memberId,
+            name : userName,
+            level : memberName,
+            image1 : password
 
           });
 
@@ -199,13 +231,13 @@ class ShowPokemonListActivity extends Component {
             renderRow={ (rowData) => <Text style={styles.rowViewContainer}
 
                       onPress={this.GetStudentIDFunction.bind(
-                        this, rowData.pokemonId,
-                         rowData.pokemonName,
-                         rowData.pokemonLevel,
-                         rowData.pokemonImage
+                        this, rowData.memberId,
+                         rowData.userName,
+                         rowData.memberName,
+                         rowData.password
                          )} >
 
-                      {rowData.pokemonName}
+                      {rowData.userName}
 
                       </Text> }
 
@@ -253,7 +285,7 @@ class EditPokemonRecordActivity extends Component {
 
     UpdatePokemonRecord = () =>{
 
-            fetch(hostAddr + 'ReactNative/UpdatePokemonRecord.php', {
+            fetch(hostAddr + 'VideoAss/updateMemberRecord.php', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -261,13 +293,13 @@ class EditPokemonRecordActivity extends Component {
             },
             body: JSON.stringify({
 
-              pokemonId : this.state.TextInput_PokemonId,
+              memberId : this.state.TextInput_PokemonId,
 
-              pokemonName : this.state.TextInput_PokemonImage,
+              memberName : this.state.TextInput_PokemonImage,
 
-              pokemonLevel : this.state.TextInput_PokemonLevel,
+              userName : this.state.TextInput_PokemonLevel,
 
-              pokemonImage : this.state.TextInput_PokemonImage
+              password : this.state.TextInput_PokemonImage
 
             })
 
@@ -286,7 +318,7 @@ class EditPokemonRecordActivity extends Component {
 
     DeletePokemonRecord = () =>{
 
-          fetch(hostAddr + 'ReactNative/DeletePokemonRecord.php', {
+          fetch(hostAddr + 'VideoAss/deteleMember.php', {
           method: 'POST',
           headers: {
           'Accept': 'application/json',
@@ -361,13 +393,13 @@ class EditPokemonRecordActivity extends Component {
 
          <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.UpdatePokemonRecord} >
 
-            <Text style={styles.TextStyle}> UPDATE POKEMON RECORD </Text>
+            <Text style={styles.TextStyle}> UPDATE MEMBER RECORD </Text>
 
          </TouchableOpacity>
 
          <TouchableOpacity activeOpacity = { .4 } style={styles.TouchableOpacityStyle} onPress={this.DeletePokemonRecord} >
 
-            <Text style={styles.TextStyle}> DELETE CURRENT RECORD </Text>
+            <Text style={styles.TextStyle}> DELETE MEMBER RECORD </Text>
 
          </TouchableOpacity>
 
@@ -379,6 +411,117 @@ class EditPokemonRecordActivity extends Component {
 
 }
 
+class SearchMember extends Component {
+
+  static navigationOptions =
+  {
+     title: 'Search Member List',
+  };
+  constructor(props) {
+  super(props);
+
+this.state = {
+
+    isLoading: true,
+  contentSearch: 'aaa',
+
+  }
+}
+
+onPressButton = () => {
+  console.log(this.state);
+  let formData = new FormData();
+   formData.append('pokemonName', this.state.contentSearch);
+
+       fetch(hostAddr + 'VideoAss/searchMember.php', {
+        method: 'POST',
+        body: formData,
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+
+      })
+       .then((response) => response.json())
+       .then((responseJson) => {
+         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+         this.setState({
+       isLoading: false,
+           dataSource: ds.cloneWithRows(responseJson),
+         }, function() {
+           // In this block you can do something with new state.
+         });
+       })
+       .catch((error) => {
+
+       });
+}
+
+componentDidMount() {
+  let formData = new FormData();
+    formData.append('memberName', this.state.contentSearch);
+     return fetch(hostAddr +'VideoAss/showAllMembers.php',{
+       method: 'POST',
+       body: formData,
+       headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'multipart/form-data',
+      }
+     })
+       .then((response) => response.json())
+       .then((responseJson) => {
+         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+         this.setState({
+       isLoading: false,
+           dataSource: ds.cloneWithRows(responseJson),
+         }, function() {
+           // In this block you can do something with new state.
+         });
+       })
+       .catch((error) => {
+         console.error(error);
+       });
+   }
+
+render() {
+  console.log(this.state.dataSource);
+  if (this.state.isLoading) {
+      return (
+        <View style={{flex: 1, paddingTop: 20}}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
+
+  return (
+    <View style={styles.container}>
+  <TextInput
+    style={styles.input}
+    placeholder="Search Text..."
+    onChangeText={(text) => this.setState({ contentSearch : text })}
+  />
+  <Button
+    onPress={this.onPressButton}
+    title="Search"
+    color="#841584"
+    accessibilityLabel="Learn more about this purple button"
+  />
+      <ListView
+        style={styles.container}
+        dataSource={this.state.dataSource}
+        renderRow={(data) => <MemberRow {...data} />}
+        renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+        renderFooter={() => <Footer />}
+        renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
+      />
+    </View>
+  );
+}
+
+}
+
+
+
 export default MyNewProject = StackNavigator(
 
   {
@@ -387,7 +530,9 @@ export default MyNewProject = StackNavigator(
 
     Second: { screen: ShowPokemonListActivity },
 
-    Third: { screen: EditPokemonRecordActivity }
+    Third: { screen: EditPokemonRecordActivity },
+
+    Fourth: { screen: SearchMember}
 
   });
 
@@ -444,6 +589,24 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 10,
     paddingBottom: 10,
-  }
+  },
+
+  container: {
+    flex: 1,
+    marginTop: 20,
+  },
+  separator: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#8E8E8E',
+  },
+  input: {
+    height: 30,
+    flex: 1,
+    paddingHorizontal: 8,
+    fontSize: 15,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 2,
+  },
 
 });

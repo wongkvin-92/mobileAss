@@ -22,7 +22,7 @@ import Header from '../components/Header'
 import SectionHeader from '../components/SectionHeader'
 import Footer from '../components/Footer'
 
-var hostAddr = "http://10.125.192.24/";
+var hostAddr = "http://192.168.0.101/";
 
 export default class AdminHomeScreen extends Component {
 
@@ -42,19 +42,32 @@ export default class AdminHomeScreen extends Component {
     }
   }
 
+  componentDidMount() {
+
+    this.listener = Expo.Notifications.addListener(this.handleNotification);
+
+  }
+   //before i move to another page
+    componentWillUnmount() {
+    this.listener && this.listener.remove();
+    }
+
+    handleNotification = ({ origin, data }) => {
+
+    };
+
   onPressButton = () => {
 	  console.log(this.state.contentSearch);
 	  let formData = new FormData();
 	   formData.append('videoName', this.state.contentSearch);
 
-	       fetch(hostAddr +'VideoAss/selectSpecificVideo.php', {
+	       fetch(hostAddr +'VideoAss/searchVideo.php', {
           method: 'POST',
           body: formData,
   			  headers: {
   				'Accept': 'application/json',
   				'Content-Type': 'multipart/form-data',
-			  },
-
+			     },
 			  })
          .then((response) => response.json())
          .then((responseJson) => {
@@ -73,6 +86,8 @@ export default class AdminHomeScreen extends Component {
 
   componentDidMount() {
 
+    this.listener = Expo.Notifications.addListener(this.handleNotification);
+
        return fetch(hostAddr +'VideoAss/showAllVideo.php')
          .then((response) => response.json())
          .then((responseJson) => {
@@ -89,9 +104,20 @@ export default class AdminHomeScreen extends Component {
          });
   }
 
+  componentWillUnmount() {
+  this.listener && this.listener.remove();
+  }
+
+  handleNotification = ({ origin, data }) => {
+
+  };
+
     showVideo(video){
       console.log(this.props);
-	     //this.props.navigation.navigate("VideoPlayer", {'video': video});
+      //this.props.navigations.navigate("AdminHomeScreen", {},
+    //      NavigationActions.navigate({"VideoPlayer"})
+    //);
+       this.props.navigation.navigate("VideoPlayer", {'video': video.videoPath, 'data': video});
     }
 
   render() {
@@ -125,7 +151,7 @@ export default class AdminHomeScreen extends Component {
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
-	         renderRow={ (d) => <Row onClick={this.showVideo.bind(this, d.videoPath) } {...d} />}
+	         renderRow={ (d) => <Row onClick={this.showVideo.bind(this, d) } {...d} />}
             renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
           renderFooter={() => <Footer />}
           renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
