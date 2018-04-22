@@ -14,7 +14,7 @@ const _MemberStackNavigator = StackNavigator(
     MemberHomeScreen: {
       screen: MemberHomeScreen
     },
-    
+
         //screen: Login
 
     VideoPlayer:{
@@ -27,7 +27,7 @@ const _MemberStackNavigator = StackNavigator(
 	}
 
     },
-      
+
 /*
     Main: {
       screen: MainTabNavigator,
@@ -59,9 +59,9 @@ export default class MemberStackNavigator extends React.Component {
     }
 
     showVideo(){
-	
+
     }
-    
+
     render() {
 
     return <_MemberStackNavigator

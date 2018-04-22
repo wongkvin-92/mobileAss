@@ -41,7 +41,7 @@ export default class ListViewDemo extends Component {
 	  let formData = new FormData();
 	   formData.append('videoName', this.state.contentSearch);
 
-	       fetch('http://192.168.0.101/VideoAss/selectSpecificVideo.php', {
+	       fetch('http://192.168.0.189/VideoAss/selectSpecificVideo.php', {
           method: 'POST',
           body: formData,
   			  headers: {
@@ -67,7 +67,7 @@ export default class ListViewDemo extends Component {
 
   componentDidMount() {
 
-       return fetch('http://192.168.0.101/VideoAss/ShowAllVideo.php')
+       return fetch('http://192.168.0.189/VideoAss/ShowAllVideo.php')
          .then((response) => response.json())
          .then((responseJson) => {
            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});

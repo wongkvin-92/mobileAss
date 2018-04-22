@@ -34,7 +34,7 @@ export default class login extends React.Component {
 
         const { email, password } = this.state;
 
-        fetch('http://192.168.0.189/VideoAss/loginMember.php', {
+        fetch('http://192.168.0.101/VideoAss/loginMember.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -54,7 +54,7 @@ export default class login extends React.Component {
               // Showing response message coming from server updating records.
               Alert.alert(responseJson);
 
-              this.props.navigation.navigate('Main');
+              this.props.navigation.navigate('192.168.0.189');
 
             }).catch((error) => {
               console.error(error);

@@ -14,31 +14,19 @@ const _MemberStackNavigator = StackNavigator(
     MemberHomeScreen: {
       screen: MemberHomeScreen
     },
-    
+
         //screen: Login
 
     VideoPlayer:{
-	screen: VideoCustomScreen,
-	navigationOptions: {
-	    tabBarVisible: true,
-	    title: 'Video Player',
-	    headerStyle: { backgroundColor: '#2196f3' },
-	    headerTintColor: '#fff'
-	}
+    	screen: VideoCustomScreen,
+    	navigationOptions: {
+    	    tabBarVisible: true,
+    	    title: 'Video Player',
+    	    headerStyle: { backgroundColor: '#2196f3' },
+    	    headerTintColor: '#fff'
+	    }
 
-    },
-      
-/*
-    Main: {
-      screen: MainTabNavigator,
-    },
-    Video:{
-      screen: VideoScreen,
-    },*/
-  /*
-    AddVideo:{
-      screen: MemberCRUDvideo,
-    },*/
+   },
 
   },
   {
@@ -57,7 +45,7 @@ export default class MemberStackNavigator extends React.Component {
 	    videoClicked: null
 	};
     }
-    
+
     render() {
 
     return <_MemberStackNavigator

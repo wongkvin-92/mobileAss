@@ -73,8 +73,8 @@ export default class ListViewDemo extends Component {
   				'Content-Type': 'multipart/form-data',
 			  },
 
-			  })
-         .then((response) => response.json())
+      })
+         .then((response) =>  { console.log(response);return response.json();})
          .then((responseJson) => {
            //console.log(responseJson);
            //this.setState({arrData: responseJson});
@@ -97,10 +97,19 @@ export default class ListViewDemo extends Component {
   componentDidMount() {
 this.listener = Expo.Notifications.addListener(this.handleNotification);
        return fetch(hostAddr +'VideoAss/showAllVideo.php')
-         .then((response) => response.json())
+         .then((response) =>  { console.log(response);return response.json();})
          .then((responseJson) => {
-           this.setState({arrData: responseJson});
-           this.updateList();
+           //console.log(responseJson);
+           var arr = [];
+           if(responseJson.result == true){
+
+             arr = responseJson;
+
+           }
+           alert(responseJson.msg);
+           this.setState({arrData: arr});
+            this.updateList();
+
            /*let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
            this.setState({

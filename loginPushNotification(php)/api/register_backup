@@ -5,7 +5,7 @@ const PUSH_ENDPOINT = 'https://exp.host/--/api/v2/push/send';
 /*
 firebase.initializeApp({
     apiKey: "AIzaSyD_gVvQeO8lrsyRFDlRTeBTxEqrbESnzRk",
-    authDomain: "fir-video-f6862.firebaseapp.com",
+    authDoMain: "fir-video-f6862.firebaseapp.com",
     databaseURL: "https://fir-video-f6862.firebaseio.com",
     projectId: "fir-video-f6862",
     storageBucket: "fir-video-f6862.appspot.com",

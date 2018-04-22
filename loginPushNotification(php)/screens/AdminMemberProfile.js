@@ -280,7 +280,7 @@ class EditPokemonRecordActivity extends Component {
 
     static navigationOptions =
     {
-       title: 'EditPokemonRecordActivity',
+       title: 'Edit Member',
     };
 
     UpdatePokemonRecord = () =>{
@@ -303,11 +303,12 @@ class EditPokemonRecordActivity extends Component {
 
             })
 
-            }).then((response) => response.json())
+            })
+            .then((response) => response.json())
                 .then((responseJson) => {
 
                   // Showing response message coming from server updating records.
-                  Alert.alert(responseJson);
+                  Alert.alert(responseJson.msg);
 
                 }).catch((error) => {
                   console.error(error);
@@ -350,7 +351,7 @@ class EditPokemonRecordActivity extends Component {
 
    <View style={styles.MainContainer}>
 
-          <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Edit Pokemon Record Form </Text>
+          <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 7}}> Edit Member Record  </Text>
 
           <TextInput
 

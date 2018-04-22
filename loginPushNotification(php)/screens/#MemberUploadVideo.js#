@@ -55,12 +55,12 @@ class VideoUpload extends Component {
 	    name: `${uri}`,
 	    type: 'video/mp4',
 	});
-	
+
 	if(uri.length == 0){
 	    Alert.alert("Please select a video");
 	    return;
 	}
-	
+
 	fetch(hostAddr + 'VideoAss/addVideo.php', {
 	    method: 'POST',
 	    body: formData,
@@ -74,7 +74,7 @@ class VideoUpload extends Component {
               // Showing response message coming from server after inserting records.
               Alert.alert(responseJson);
 
-	      
+
           }).catch((error) => {
               console.error(error);
           });

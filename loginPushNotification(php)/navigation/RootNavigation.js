@@ -8,9 +8,6 @@ import Login from '../screens/LoginScreen';
 import SignUp from '../screens/SignUpScreen';
 import AdminTabNavigator from './AdminTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
-import VideoScreen from '../screens/VideoScreen';
-import MemberCRUDvideo from '../screens/MemberCRUDvideo';
-
 
  const tabNav = TabNavigator({
  AdminLogin: {
@@ -50,7 +47,7 @@ export default class RootNavigator extends React.Component {
   render() {
 
     return <RootStackNavigator
-        screenProps={this.props}
-    />;
+              screenProps={this.props}
+           />;
   }
 }

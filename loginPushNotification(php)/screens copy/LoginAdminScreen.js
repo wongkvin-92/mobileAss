@@ -35,7 +35,7 @@ export default class login extends React.Component {
 
         const { email, password } = this.state;
 
-        fetch('http://192.168.0.189/VideoAss/loginAdmin.php', {
+        fetch('http://192.168.0.101/VideoAss/loginAdmin.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

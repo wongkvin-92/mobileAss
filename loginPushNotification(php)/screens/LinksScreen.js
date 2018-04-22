@@ -27,12 +27,12 @@ export default class LinksScreen extends React.Component {
   }
   componentDidMount() {
     this._notificationSubscription = this._registerForPushNotifications();
-   // this._clearIconBadgeAsync();  
+   // this._clearIconBadgeAsync();
   }
   componentWillUnmount() {
     this._notificationSubscription && this._notificationSubscription.remove();
-  
-    
+
+
   }
 
   // //use later for push notification description
@@ -75,6 +75,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
-
-
-

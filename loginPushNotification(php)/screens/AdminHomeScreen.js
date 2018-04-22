@@ -37,7 +37,7 @@ export default class AdminHomeScreen extends Component {
 	this.state = {
 
       isLoading: true,
-	  contentSearch: 'aaa',
+	  contentSearch: '',
 
     }
   }
@@ -59,6 +59,10 @@ export default class AdminHomeScreen extends Component {
   onPressButton = () => {
 	  console.log(this.state.contentSearch);
 	  let formData = new FormData();
+    console.log(this.state.contentSearch);
+    if(this.state.contentSearch === ""){
+      alert("Empty!");
+    }else{
 	   formData.append('videoName', this.state.contentSearch);
 
 	       fetch(hostAddr +'VideoAss/searchVideo.php', {
@@ -82,6 +86,7 @@ export default class AdminHomeScreen extends Component {
          .catch((error) => {
 
          });
+       }
   }
 
   componentDidMount() {
@@ -91,13 +96,30 @@ export default class AdminHomeScreen extends Component {
        return fetch(hostAddr +'VideoAss/showAllVideo.php')
          .then((response) => response.json())
          .then((responseJson) => {
-           let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-           this.setState({
-	       isLoading: false,
-               dataSource: ds.cloneWithRows(responseJson),
-           }, function() {
-             // In this block you can do something with new state.
-           });
+          // console.log(responseJson);
+
+          var arr = [];
+            let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+          if(responseJson.result==false){
+
+             this.setState({
+  	            isLoading: false,
+                dataSource: ds
+
+             }, function() {
+               // In this block you can do something with new state.
+             });
+           }
+          else{
+            arr = responseJson;
+
+            this.setState({
+ 	            isLoading: false,
+                dataSource: ds.cloneWithRows(arr),
+            }, function() {
+              // In this block you can do something with new state.
+            });
+}
          })
          .catch((error) => {
            console.error(error);
